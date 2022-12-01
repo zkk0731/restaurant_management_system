@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.restaurant_management_system.entity.Orders;
 
 @Repository
-public interface OredrsDao extends JpaRepository<Orders, Integer> {
+public interface OrdersDao extends JpaRepository<Orders, Integer> {
 
 }
