@@ -1,9 +1,10 @@
 package com.example.restaurant_management_system.service.ifs;
 
-import java.awt.Menu;
 import java.util.List;
+import com.example.restaurant_management_system.entity.Menu;
 
 public interface CustomerService {
-	
-	public List<Menu>searchTopCommodtity();
+
+	// 查詢熱門餐點排行前五
+	public List<Menu> searchTop5Commodtity();
 }

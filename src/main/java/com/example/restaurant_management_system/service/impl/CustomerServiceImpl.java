@@ -1,26 +1,27 @@
 package com.example.restaurant_management_system.service.impl;
 
-import java.awt.Menu;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.repository.MenuDao;
 import com.example.restaurant_management_system.service.ifs.CustomerService;
 
-
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private MenuDao menuDao;
-	
+
+	// API-4.查詢餐點排行榜
 	@Override
-	public List<Menu> searchTopCommodtity() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Menu> searchTop5Commodtity() {
+		List<Menu> commodtityLeaderBoard = new ArrayList<>();
+		commodtityLeaderBoard = menuDao.findTop5ByOrderBySalesVolumeDesc();
+		return commodtityLeaderBoard;
 	}
 
-	
 }
