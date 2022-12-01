@@ -7,5 +7,6 @@ import com.example.restaurant_management_system.entity.Menu;
 
 @Repository
 public interface MenuDao extends JpaRepository<Menu, String> {
-
+	
+	
 }
