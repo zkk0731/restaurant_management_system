@@ -7,6 +7,8 @@ public class SellerRes {
 	private Integer totalPrice;
 	
 	private Integer salesVolume;
+	
+	private String message;
 
 	public String getCommodityName() {
 		return commodityName;
@@ -30,6 +32,14 @@ public class SellerRes {
 
 	public void setSalesVolume(Integer salesVolume) {
 		this.salesVolume = salesVolume;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 	

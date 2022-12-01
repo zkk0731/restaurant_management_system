@@ -2,6 +2,9 @@ package com.example.restaurant_management_system;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +23,16 @@ public class SearchSalesVolumeTest {
 	
 	@Test
 	public void queryByDateTest() throws ParseException {
-		String dateStr1 = "2022-11-10";
-		String dateStr2 = "2022-11-30";
-		Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr1);
-		Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr2);
-//		List<Orders> result = ordersDao.doQueryOrdersByDate(date1, date2);
-//		for(Orders item:result) {
-//			System.out.println("--> "+item.getOrderId());
-//		}
+		String dateStr1 = "2022-10-11 00:00:00";
+		String dateStr2 = "2022-11-30 00:00:00";
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		LocalDateTime date1 = LocalDateTime.parse(dateStr1,format);
+		LocalDateTime date2 = LocalDateTime.parse(dateStr2,format);
+		
+		List<Orders> result = ordersDao.doQueryOrdersByDate(date1, date2);
+		for(Orders item:result) {
+			System.out.println("--> "+item.getOrderId());
+		}
 	}
 }
