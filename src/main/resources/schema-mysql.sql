@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS `restaurant_management_system_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-
 CREATE TABLE IF NOT EXISTS `members` (
   `member_id` int NOT NULL AUTO_INCREMENT,
   `member_account` varchar(30) NOT NULL,
@@ -11,16 +9,14 @@ CREATE TABLE IF NOT EXISTS `members` (
   `line_id` varchar(30) DEFAULT NULL,
   `email` varchar(30) DEFAULT NULL,
   `points` int DEFAULT '0',
-  PRIMARY KEY (`member_id`)
-) ;
+  PRIMARY KEY (`member_id`));
 
 CREATE TABLE IF NOT EXISTS `menu` (
   `commodtity_name` varchar(30) NOT NULL,
   `price` int NOT NULL,
   `category` varchar(30) NOT NULL,
   `sales_volume` int DEFAULT NULL,
-  PRIMARY KEY (`commodtity_name`)
-) ;
+  PRIMARY KEY (`commodtity_name`));
 
 CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int NOT NULL AUTO_INCREMENT,
@@ -30,6 +26,5 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `order_datetime` datetime NOT NULL,
   `order_state` varchar(30) NOT NULL,
   `points_state` int DEFAULT NULL,
-  PRIMARY KEY (`order_id`)
-) ;
+  PRIMARY KEY (`order_id`));
 
