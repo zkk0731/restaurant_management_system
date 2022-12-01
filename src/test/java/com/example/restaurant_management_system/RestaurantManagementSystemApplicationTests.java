@@ -8,6 +8,7 @@ class RestaurantManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("test");
 	}
 
 }
