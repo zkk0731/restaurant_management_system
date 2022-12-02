@@ -19,7 +19,7 @@ public class Orders {
 	private String orderInfo;
 
 	@Column(name = "total_price")
-	private int total_price;
+	private int totalPrice;
 
 	@Column(name = "member_id")
 	private String memberId;
@@ -49,12 +49,14 @@ public class Orders {
 		this.orderInfo = orderInfo;
 	}
 
-	public int getTotal_price() {
-		return total_price;
+	
+
+	public int getTotalPrice() {
+		return totalPrice;
 	}
 
-	public void setTotal_price(int total_price) {
-		this.total_price = total_price;
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 	public String getMemberId() {

@@ -10,8 +10,8 @@ import javax.persistence.Table;
 public class Menu {
 
 	@Id
-	@Column(name = "commodtity_name")
-	private String commodtityName;
+	@Column(name = "commodity_name")
+	private String commodityName;
 
 	@Column(name = "price")
 	private int price;
@@ -22,12 +22,12 @@ public class Menu {
 	@Column(name = "sales_volume")
 	private int salesVolume;
 
-	public String getCommodtityName() {
-		return commodtityName;
+	public String getCommodityName() {
+		return commodityName;
 	}
 
-	public void setCommodtityName(String commodtityName) {
-		this.commodtityName = commodtityName;
+	public void setCommodityName(String commodityName) {
+		this.commodityName = commodityName;
 	}
 
 	public int getPrice() {

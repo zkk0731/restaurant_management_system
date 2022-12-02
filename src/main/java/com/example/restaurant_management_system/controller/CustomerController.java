@@ -11,13 +11,13 @@ import com.example.restaurant_management_system.service.ifs.CustomerService;
 
 @RestController
 public class CustomerController {
-	
+
 	@Autowired
 	private CustomerService customerService;
-	
+
 	// API-4.查詢餐點排行榜
-	@PostMapping(value = "/searchTop5Commodtity")
-	public List<Menu>searchTop5Commodtity(){
-		return customerService.searchTop5Commodtity();
+	@PostMapping(value = "/searchTop5Commodity")
+	public List<Menu> searchTop5Commodity() {
+		return customerService.searchTop5Commodity();
 	}
 }

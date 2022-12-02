@@ -6,5 +6,5 @@ import com.example.restaurant_management_system.entity.Menu;
 public interface CustomerService {
 
 	// 查詢熱門餐點排行前五
-	public List<Menu> searchTop5Commodtity();
+	public List<Menu> searchTop5Commodity();
 }

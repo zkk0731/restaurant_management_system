@@ -18,10 +18,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	// API-4.查詢餐點排行榜
 	@Override
-	public List<Menu> searchTop5Commodtity() {
-		List<Menu> commodtityLeaderBoard = new ArrayList<>();
-		commodtityLeaderBoard = menuDao.findTop5ByOrderBySalesVolumeDesc();
-		return commodtityLeaderBoard;
+	public List<Menu> searchTop5Commodity() {
+		List<Menu> commodityLeaderBoard = new ArrayList<>();
+		commodityLeaderBoard = menuDao.findTop5ByOrderBySalesVolumeDesc();
+		return commodityLeaderBoard;
 	}
 
 }

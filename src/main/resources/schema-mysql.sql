@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   PRIMARY KEY (`member_id`));
 
 CREATE TABLE IF NOT EXISTS `menu` (
-  `commodtity_name` varchar(30) NOT NULL,
+  `commodity_name` varchar(30) NOT NULL,
   `price` int NOT NULL,
   `category` varchar(30) NOT NULL,
   `sales_volume` int DEFAULT NULL,
