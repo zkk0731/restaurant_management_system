@@ -15,7 +15,7 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	// API-4.查詢餐點排行榜
+	// API-5.查詢餐點排行榜
 	@PostMapping(value = "/searchTop5Commodity")
 	public List<Menu> searchTop5Commodity() {
 		return customerService.searchTop5Commodity();

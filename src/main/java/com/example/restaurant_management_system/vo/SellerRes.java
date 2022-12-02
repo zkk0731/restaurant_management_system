@@ -8,13 +8,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class SellerRes {
 
 	private String commodityName;
-	
+
+	private int price;
+
+	private String category;
+
 	private Map<String, Integer> orderInfoMap;
-	
+
 	private Integer totalPrice;
-	
+
 	private Integer salesVolume;
-	
+
 	private String message;
 
 	public String getCommodityName() {
@@ -23,6 +27,22 @@ public class SellerRes {
 
 	public void setCommodityName(String commodityName) {
 		this.commodityName = commodityName;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public Integer getTotalPrice() {
@@ -56,6 +76,5 @@ public class SellerRes {
 	public void setOrderInfoMap(Map<String, Integer> orderInfoMap) {
 		this.orderInfoMap = orderInfoMap;
 	}
-	
-	
+
 }

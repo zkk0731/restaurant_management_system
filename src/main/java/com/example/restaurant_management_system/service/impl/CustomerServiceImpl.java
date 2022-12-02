@@ -16,7 +16,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private MenuDao menuDao;
 
-	// API-4.查詢餐點排行榜
+	// API-5.查詢餐點排行榜
 	@Override
 	public List<Menu> searchTop5Commodity() {
 		List<Menu> commodityLeaderBoard = new ArrayList<>();

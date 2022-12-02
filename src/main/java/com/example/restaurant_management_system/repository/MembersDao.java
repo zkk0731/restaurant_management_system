@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.example.restaurant_management_system.entity.Members;
 
 @Repository
-public interface MembersDao extends JpaRepository<Members, Integer>{
+public interface MembersDao extends JpaRepository<Members, Integer> {
+
+	public Members findByMemberAccount(String memberAccount);
 
 }

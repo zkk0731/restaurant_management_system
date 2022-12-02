@@ -7,12 +7,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SellerReq {
 
+	private String commodityName;
+
+	private int price;
+
+	private String category;
+
+	private String customerEmail;
+
 	@JsonProperty("start_date_time")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime startDateTime;
-	
+
 	@JsonProperty("end_date_time")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime endDateTime;
 
 	public LocalDateTime getStartDateTime() {
@@ -23,6 +31,38 @@ public class SellerReq {
 		this.startDateTime = startDateTime;
 	}
 
+	public String getCommodityName() {
+		return commodityName;
+	}
+
+	public void setCommodityName(String commodityName) {
+		this.commodityName = commodityName;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
+	}
+
 	public LocalDateTime getEndDateTime() {
 		return endDateTime;
 	}
@@ -30,6 +70,5 @@ public class SellerReq {
 	public void setEndDateTime(LocalDateTime endDateTime) {
 		this.endDateTime = endDateTime;
 	}
-	
-	
+
 }
