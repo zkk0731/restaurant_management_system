@@ -26,8 +26,8 @@ public class Menu {
 		return commodityName;
 	}
 
-	public void setCommodityName(String commodtityName) {
-		this.commodityName = commodtityName;
+	public void setCommodityName(String commodityName) {
+		this.commodityName = commodityName;
 	}
 
 	public int getPrice() {
