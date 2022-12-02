@@ -12,6 +12,6 @@ import com.example.restaurant_management_system.entity.Orders;
 @Repository
 public interface OrdersDao extends JpaRepository<Orders, Integer> {
 
-	public List<Orders> doQueryOrdersByDate(LocalDateTime startDate, LocalDateTime endDate);
+	public List<Orders> findByOrderDatetimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 	
 }

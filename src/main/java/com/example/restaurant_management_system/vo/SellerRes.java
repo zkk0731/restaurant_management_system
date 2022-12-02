@@ -1,8 +1,15 @@
 package com.example.restaurant_management_system.vo;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SellerRes {
 
 	private String commodityName;
+	
+	private Map<String, Integer> orderInfoMap;
 	
 	private Integer totalPrice;
 	
@@ -40,6 +47,14 @@ public class SellerRes {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Map<String, Integer> getOrderInfoMap() {
+		return orderInfoMap;
+	}
+
+	public void setOrderInfoMap(Map<String, Integer> orderInfoMap) {
+		this.orderInfoMap = orderInfoMap;
 	}
 	
 	
