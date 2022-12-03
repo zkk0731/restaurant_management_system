@@ -10,7 +10,7 @@ public class CustomerReq {
 
 	private String category;
 
-	private int points;
+	private int costPoints;
 
 	private Map<String, Integer> orderInfoMap;
 
@@ -38,12 +38,12 @@ public class CustomerReq {
 		this.category = category;
 	}
 
-	public int getPoints() {
-		return points;
+	public int getCostPoints() {
+		return costPoints;
 	}
 
-	public void setPoints(int points) {
-		this.points = points;
+	public void setCostPoints(int costPoints) {
+		this.costPoints = costPoints;
 	}
 
 	public Map<String, Integer> getOrderInfoMap() {

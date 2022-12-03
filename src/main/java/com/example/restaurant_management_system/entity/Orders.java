@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 public class Orders {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
 	private int orderId;
 
@@ -30,9 +33,22 @@ public class Orders {
 	@Column(name = "order_state")
 	private String orderState;
 
-	@Column(name = "points_state")
-	private int pointsState;
+	@Column(name = "points_get")
+	private int pointsGet;
+	
+	@Column(name = "points_cost")
+	private int pointsCost;
 
+	public Orders() {
+		
+	}
+	
+	public Orders(String orderInfo, LocalDateTime orderDatetime, String orderState) {
+		this.orderInfo = orderInfo;
+		this.orderDatetime = orderDatetime;
+		this.orderState = orderState;
+	}
+	
 	public int getOrderId() {
 		return orderId;
 	}
@@ -83,12 +99,22 @@ public class Orders {
 		this.orderState = orderState;
 	}
 
-	public int getPointsState() {
-		return pointsState;
+	public int getPointsGet() {
+		return pointsGet;
 	}
 
-	public void setPointsState(int pointsState) {
-		this.pointsState = pointsState;
+	public void setPointsGet(int pointsGet) {
+		this.pointsGet = pointsGet;
 	}
+
+	public int getPointsCost() {
+		return pointsCost;
+	}
+
+	public void setPointsCost(int pointsCost) {
+		this.pointsCost = pointsCost;
+	}
+
+	
 
 }

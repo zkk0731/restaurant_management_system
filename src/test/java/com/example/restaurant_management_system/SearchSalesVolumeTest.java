@@ -28,7 +28,7 @@ public class SearchSalesVolumeTest {
 	
 	@Test
 	public void queryByDateTest() throws ParseException {
-		String dateStr1 = "2022-10-11 00:00:00";
+		String dateStr1 = "2022-10-01 00:00:00";
 		String dateStr2 = "2022-11-30 00:00:00";
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -43,7 +43,7 @@ public class SearchSalesVolumeTest {
 	
 	@Test
 	public void searchSalesVolumeTest() {
-		String dateStr1 = "2022-10-11 00:00:00";
+		String dateStr1 = "2022-10-01 00:00:00";
 		String dateStr2 = "2022-11-30 00:00:00";
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

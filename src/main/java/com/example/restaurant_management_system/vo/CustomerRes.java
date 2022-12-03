@@ -13,6 +13,8 @@ public class CustomerRes {
 	private Integer totalPrice;
 
 	private String message;
+	
+	private String pointsExchangeMessage;
 
 	private Map<String, Integer> orderInfoMap;
 
@@ -66,6 +68,14 @@ public class CustomerRes {
 
 	public void setOrderDateTime(LocalDateTime orderDateTime) {
 		this.orderDateTime = orderDateTime;
+	}
+
+	public String getPointsExchangeMessage() {
+		return pointsExchangeMessage;
+	}
+
+	public void setPointsExchangeMessage(String pointsExchangeMessage) {
+		this.pointsExchangeMessage = pointsExchangeMessage;
 	}
 
 	
