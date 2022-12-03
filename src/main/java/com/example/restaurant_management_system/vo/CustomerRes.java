@@ -1,5 +1,6 @@
 package com.example.restaurant_management_system.vo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ public class CustomerRes {
 	private Map<String, Integer> orderInfoMap;
 
 	private List<Menu> menuList;
+	
+	private LocalDateTime orderDateTime;
 
 	public Integer getPoints() {
 		return points;
@@ -57,4 +60,13 @@ public class CustomerRes {
 		this.menuList = menuList;
 	}
 
+	public LocalDateTime getOrderDateTime() {
+		return orderDateTime;
+	}
+
+	public void setOrderDateTime(LocalDateTime orderDateTime) {
+		this.orderDateTime = orderDateTime;
+	}
+
+	
 }
