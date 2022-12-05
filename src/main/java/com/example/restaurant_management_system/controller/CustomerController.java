@@ -40,11 +40,11 @@ public class CustomerController {
 	}
 
 	// API-6.餐點分類查詢
-	@PostMapping(value = "/findByCategory")
-	public CustomerRes findByCategory(@RequestBody CustomerReq req) {
+	@PostMapping(value = "/searchCategory")
+	public CustomerRes searchCategory(@RequestBody CustomerReq req) {
 		if (!StringUtils.hasText(req.getCategory())) {
 			return new CustomerRes(RtnCode.CATEGORY_ISNOT_EXIST.getMessage());
 		}
-		return customerService.findByCategory(req.getCategory());
+		return customerService.searchCategory(req.getCategory());
 	}
 }

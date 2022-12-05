@@ -130,7 +130,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	// API-6.餐點分類查詢
 	@Override
-	public CustomerRes findByCategory(String category) {
+	public CustomerRes searchCategory(String category) {
 		String[] categoryArray = category.split(",");
 		Set<String> categorySet = new HashSet<>();
 

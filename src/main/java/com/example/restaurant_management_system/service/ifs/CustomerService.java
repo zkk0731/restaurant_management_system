@@ -14,6 +14,6 @@ public interface CustomerService {
 	public CustomerRes customerOrder(CustomerReq req);
 
 	// 餐點分類查詢
-	public CustomerRes findByCategory(String category);
+	public CustomerRes searchCategory(String category);
 
 }
