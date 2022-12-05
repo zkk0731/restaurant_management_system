@@ -14,6 +14,10 @@ public class CustomerReq {
 
 	private Map<String, Integer> orderInfoMap;
 
+	public CustomerReq() {
+
+	}
+
 	public String getMemberAccount() {
 		return memberAccount;
 	}

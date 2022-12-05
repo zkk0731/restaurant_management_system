@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,17 +26,25 @@ public class CustomerController {
 	public List<Menu> searchTop5Commodity() {
 		return customerService.searchTop5Commodity();
 	}
-	
+
 	// 點餐
 	@PostMapping(value = "/customerOrder")
 	public CustomerRes customerOrder(@RequestBody CustomerReq req) {
 		CustomerRes res = new CustomerRes();
-		if(CollectionUtils.isEmpty(req.getOrderInfoMap())) {
+		if (CollectionUtils.isEmpty(req.getOrderInfoMap())) {
 			res.setMessage(RtnCode.PARAMETER_REQUIRED.getMessage());
 			return res;
 		}
-		
+
 		return customerService.customerOrder(req);
-		
+	}
+
+	// API-6.餐點分類查詢
+	@PostMapping(value = "/findByCategory")
+	public CustomerRes findByCategory(@RequestBody CustomerReq req) {
+		if (!StringUtils.hasText(req.getCategory())) {
+			return new CustomerRes(RtnCode.CATEGORY_ISNOT_EXIST.getMessage());
+		}
+		return customerService.findByCategory(req.getCategory());
 	}
 }

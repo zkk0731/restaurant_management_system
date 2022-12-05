@@ -4,7 +4,8 @@ public enum RtnCode {
 	SUCCESS("200","Success"),
 	ACCOUNT_EXIST("403", "帳號已存在"),
 	PARAMETER_ERROR("403", "資料格式錯誤"),
-	PARAMETER_REQUIRED("403", "所需資料缺失");
+	PARAMETER_REQUIRED("403", "所需資料缺失"),
+	CATEGORY_ISNOT_EXIST("403", "分類不存在");
 	
 	
 	private String code;

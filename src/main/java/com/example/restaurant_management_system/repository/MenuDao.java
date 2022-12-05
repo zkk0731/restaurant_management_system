@@ -13,6 +13,7 @@ public interface MenuDao extends JpaRepository<Menu, String> {
 	// 透過餐點銷售量前五由大到小列出排序
 	public List<Menu> findTop5ByOrderBySalesVolumeDesc();
 
+	// 透過餐點分類查詢
 	public List<Menu> findByCategory(String category);
 
 }

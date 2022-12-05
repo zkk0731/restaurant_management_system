@@ -24,8 +24,8 @@ public class Orders {
 	@Column(name = "total_price")
 	private int totalPrice;
 
-	@Column(name = "member_id")
-	private String memberId;
+	@Column(name = "member_account")
+	private String memberAccount;
 
 	@Column(name = "order_datetime")
 	private LocalDateTime orderDatetime;
@@ -35,20 +35,20 @@ public class Orders {
 
 	@Column(name = "points_get")
 	private int pointsGet;
-	
+
 	@Column(name = "points_cost")
 	private int pointsCost;
 
 	public Orders() {
-		
+
 	}
-	
+
 	public Orders(String orderInfo, LocalDateTime orderDatetime, String orderState) {
 		this.orderInfo = orderInfo;
 		this.orderDatetime = orderDatetime;
 		this.orderState = orderState;
 	}
-	
+
 	public int getOrderId() {
 		return orderId;
 	}
@@ -65,8 +65,6 @@ public class Orders {
 		this.orderInfo = orderInfo;
 	}
 
-	
-
 	public int getTotalPrice() {
 		return totalPrice;
 	}
@@ -75,12 +73,12 @@ public class Orders {
 		this.totalPrice = totalPrice;
 	}
 
-	public String getMemberId() {
-		return memberId;
+	public String getMemberAccount() {
+		return memberAccount;
 	}
 
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
+	public void setMemberAccount(String memberAccount) {
+		this.memberAccount = memberAccount;
 	}
 
 	public LocalDateTime getOrderDatetime() {
@@ -114,7 +112,5 @@ public class Orders {
 	public void setPointsCost(int pointsCost) {
 		this.pointsCost = pointsCost;
 	}
-
-	
 
 }

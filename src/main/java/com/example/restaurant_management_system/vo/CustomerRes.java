@@ -3,6 +3,7 @@ package com.example.restaurant_management_system.vo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.example.restaurant_management_system.entity.Menu;
 
@@ -13,14 +14,24 @@ public class CustomerRes {
 	private Integer totalPrice;
 
 	private String message;
-	
+
 	private String pointsExchangeMessage;
 
 	private Map<String, Integer> orderInfoMap;
 
 	private List<Menu> menuList;
-	
+
 	private LocalDateTime orderDateTime;
+
+	private Set<Menu> menuSet;
+
+	public CustomerRes() {
+
+	}
+
+	public CustomerRes(String message) {
+		this.message = message;
+	}
 
 	public Integer getPoints() {
 		return points;
@@ -78,5 +89,12 @@ public class CustomerRes {
 		this.pointsExchangeMessage = pointsExchangeMessage;
 	}
 
-	
+	public Set<Menu> getMenuSet() {
+		return menuSet;
+	}
+
+	public void setMenuSet(Set<Menu> menuSet) {
+		this.menuSet = menuSet;
+	}
+
 }

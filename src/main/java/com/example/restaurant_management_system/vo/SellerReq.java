@@ -23,6 +23,10 @@ public class SellerReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime endDateTime;
 
+	public SellerReq() {
+
+	}
+
 	public LocalDateTime getStartDateTime() {
 		return startDateTime;
 	}

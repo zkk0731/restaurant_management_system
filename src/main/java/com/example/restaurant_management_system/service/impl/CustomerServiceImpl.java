@@ -2,9 +2,11 @@ package com.example.restaurant_management_system.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,15 +53,15 @@ public class CustomerServiceImpl implements CustomerService {
 		int totalPrice = calculateTotalPrice(orderInfoMap);
 		Orders orders = new Orders(orderInfoString, LocalDateTime.now(), "unchecked");
 		orders.setTotalPrice(totalPrice);
-		
+
 		// 確認是否為會員
 		if (StringUtils.hasText(req.getMemberAccount())) {
 			Members memberInfo = membersDao.findByMemberAccount(req.getMemberAccount());
-			orders.setMemberId(req.getMemberAccount());
+			orders.setMemberAccount(req.getMemberAccount());
 
 			// 點數兌換及獲得
 			pointsGetAndExchange(req.getCostPoints(), memberInfo, orders, res);
-	
+
 			membersDao.save(memberInfo);
 
 		}
@@ -116,13 +118,39 @@ public class CustomerServiceImpl implements CustomerService {
 				break;
 			}
 		}
-		
-		if(totalPrice > 100) {
-			pointsGet += totalPrice/100;
+
+		if (totalPrice > 100) {
+			pointsGet += totalPrice / 100;
 		}
 		orders.setTotalPrice(totalPrice);
 		orders.setPointsCost(pointsCost);
 		orders.setPointsGet(pointsGet);
 		memberInfo.setPoints(memberInfo.getPoints() - pointsCost + pointsGet);
+	}
+
+	// API-6.餐點分類查詢
+	@Override
+	public CustomerRes findByCategory(String category) {
+		String[] categoryArray = category.split(",");
+		Set<String> categorySet = new HashSet<>();
+
+		for (String commodity : categoryArray) {
+			String str = commodity.trim();
+			categorySet.add(str);
+		}
+
+		List<Menu> menuList = menuDao.findAll();
+		Set<Menu> menuSet = new HashSet<>();
+		for (String categoryStr : categorySet) {
+			for (Menu menu : menuList) {
+				if (menu.getCategory().contains(categoryStr)) {
+					menuSet.add(menu);
+				}
+			}
+		}
+
+		CustomerRes res = new CustomerRes();
+		res.setMenuSet(menuSet);
+		return res;
 	}
 }
