@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.example.restaurant_management_system.entity.Menu;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerRes {
 
 	private Integer points;

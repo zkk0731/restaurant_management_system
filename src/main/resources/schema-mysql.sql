@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int NOT NULL AUTO_INCREMENT,
   `order_info` varchar(100) NOT NULL,
   `total_price` int NOT NULL,
-  `member_id` varchar(30) DEFAULT NULL,
+  `member_account` varchar(30) DEFAULT NULL,
   `order_datetime` datetime NOT NULL,
   `order_state` varchar(30) NOT NULL,
   `points_get` int DEFAULT NULL,
