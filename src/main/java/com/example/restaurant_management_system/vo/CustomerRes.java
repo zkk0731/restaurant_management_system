@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.example.restaurant_management_system.entity.Members;
 import com.example.restaurant_management_system.entity.Menu;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerRes {
 
 	private Integer points;
@@ -24,9 +27,19 @@ public class CustomerRes {
 	private LocalDateTime orderDateTime;
 
 	private Set<Menu> menuSet;
+	
+	private Members member;
 
 	public CustomerRes() {
 
+	}
+
+	public Members getMember() {
+		return member;
+	}
+
+	public void setMember(Members member) {
+		this.member = member;
 	}
 
 	public CustomerRes(String message) {

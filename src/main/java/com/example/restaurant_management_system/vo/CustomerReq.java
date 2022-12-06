@@ -6,7 +6,17 @@ public class CustomerReq {
 
 	private String memberAccount;
 
-	private String pwd;
+	private String memberPwd;
+	
+	private String memberName;
+	
+	private String memberPhone;
+	
+	private int memberAgeRange;
+	
+	private String memberLineId;
+	
+	private String memberEmail;
 
 	private String category;
 
@@ -18,20 +28,64 @@ public class CustomerReq {
 
 	}
 
+	public String getMemberPwd() {
+		return memberPwd;
+	}
+
+	public void setMemberPwd(String memberPwd) {
+		this.memberPwd = memberPwd;
+	}
+
+	public String getMemberPhone() {
+		return memberPhone;
+	}
+
+	public void setMemberPhone(String memberPhone) {
+		this.memberPhone = memberPhone;
+	}
+
+	public String getMemberLineId() {
+		return memberLineId;
+	}
+
+	public void setMemberLineId(String memberLineId) {
+		this.memberLineId = memberLineId;
+	}
+
+	public String getMemberEmail() {
+		return memberEmail;
+	}
+
+	public void setMemberEmail(String memberEmail) {
+		this.memberEmail = memberEmail;
+	}
+
+	public int getMemberAgeRange() {
+		return memberAgeRange;
+	}
+
+
+
+	public void setMemberAgeRange(int memberAgeRange) {
+		this.memberAgeRange = memberAgeRange;
+	}
+
+
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
 	public String getMemberAccount() {
 		return memberAccount;
 	}
 
 	public void setMemberAccount(String memberAccount) {
 		this.memberAccount = memberAccount;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 
 	public String getCategory() {

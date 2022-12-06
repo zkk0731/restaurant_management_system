@@ -47,4 +47,43 @@ public class CustomerController {
 		}
 		return customerService.searchCategory(req.getCategory());
 	}
+
+	// 創建會員
+	@PostMapping(value = "/createMember")
+	public CustomerRes createMember(@RequestBody CustomerReq req) {
+		//判斷必填資料是否存在
+		if(!StringUtils.hasText(req.getMemberAccount()) ||
+				!StringUtils.hasText(req.getMemberPwd()) ||
+				!StringUtils.hasText(req.getMemberName()) ||
+				!StringUtils.hasText(req.getMemberPhone())) {
+			return new CustomerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		
+		CustomerRes check = phoneAndEmailPatternCheck(req);
+		if(check != null) {
+			return check;
+		}
+		
+		return customerService.createMember(req);
+	}
+	
+	//判斷手機號碼與email的格式是否正確
+	private CustomerRes phoneAndEmailPatternCheck(CustomerReq req) {
+		String phonePattern = "09\\d{8}";
+		String emailPattern = "[A-za-z0-9]+@[A-za-z0-9]+\\.com";
+		
+		//手機號碼格式判斷
+		if(!req.getMemberPhone().matches(phonePattern)) {
+			return new CustomerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		//email 格式判斷
+		if(StringUtils.hasText(req.getMemberEmail()) && 
+				!req.getMemberEmail().matches(emailPattern)) {
+			return new CustomerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		return null;
+	}
+
 }

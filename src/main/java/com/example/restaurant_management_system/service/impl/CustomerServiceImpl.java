@@ -153,4 +153,43 @@ public class CustomerServiceImpl implements CustomerService {
 		res.setMenuSet(menuSet);
 		return res;
 	}
+
+	@Override
+	public CustomerRes createMember(CustomerReq req) {
+		CustomerRes res = new CustomerRes();
+		Members member = membersDao.findByMemberAccount(req.getMemberAccount());
+		
+		//判斷帳號是否被使用
+		if(member != null) {
+			res.setMessage(RtnCode.ACCOUNT_EXIST.getMessage());
+			return res;
+		}
+		//設定基本資料		
+		member = new Members(req.getMemberAccount(), req.getMemberPwd(),
+				req.getMemberName(), req.getMemberPhone());
+		
+		//將非必填的會員資料寫入	
+		setUnnecessaryMemberInfo(req, member);
+		//存入DB
+		membersDao.save(member);
+		
+		res.setMember(member);
+		res.setMessage(RtnCode.SUCCESS.getMessage());
+		return res;
+	}
+	
+	//將非必填的會員資料寫入	
+	private void setUnnecessaryMemberInfo(CustomerReq req, Members member) {
+		if(req.getMemberAgeRange() != 0) {
+			member.setAgeRange(req.getMemberAgeRange());
+		}
+		
+		if(req.getMemberEmail() != null) {
+			member.setEmail(req.getMemberEmail());
+		}
+		
+		if(req.getMemberLineId() != null) {
+			member.setLineId(req.getMemberLineId());
+		}
+	}
 }
