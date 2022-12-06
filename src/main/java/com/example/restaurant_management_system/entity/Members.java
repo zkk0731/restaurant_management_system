@@ -2,14 +2,20 @@ package com.example.restaurant_management_system.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @Table(name = "members")
 public class Members {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
 	private int memberId;
 
@@ -44,6 +50,17 @@ public class Members {
 		return memberId;
 	}
 
+	public Members() {
+		
+	}
+	
+	public Members(String memberAccount, String pwd, String memberName, String phone) {
+		this.memberAccount = memberAccount;
+		this.pwd = pwd;
+		this.memberName = memberName;
+		this.phone = phone;
+	}
+	
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
 	}

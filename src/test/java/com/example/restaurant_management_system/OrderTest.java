@@ -33,13 +33,26 @@ public class OrderTest {
 		orderInfoMap.put("beef", 3);
 		orderInfoMap.put("chicken", 2);
 		req.setOrderInfoMap(orderInfoMap);
-		req.setMemberAccount("AA");
-		req.setCostPoints(1);
+//		req.setMemberAccount("AA");
+//		req.setCostPoints(1);
 		
 		CustomerRes res = customerService.customerOrder(req);
 		System.out.println(res.getMessage());
 		System.out.println(res.getPointsExchangeMessage());
 
+	}
+	
+	@Test
+	public void patternTest() {
+		String phonePattern = "09\\d{8}";
+		String emailPattern = "[A-za-z0-9]+@[A-za-z0-9]+\\.com";
+		
+		String phone = "0912345678";
+		String email = "abcd@gmail.com";
+		
+		System.out.println(phone.matches(phonePattern));
+		System.out.println(email.matches(emailPattern));
+		
 	}
 	
 }
