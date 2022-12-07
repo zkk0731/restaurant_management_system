@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `points_cost` int DEFAULT NULL,
   PRIMARY KEY (`order_id`));
 
-CREATE TABLE `IF NOT EXISTS `points_exchange` (
+CREATE TABLE IF NOT EXISTS `points_exchange` (
   `point_id` INT NOT NULL AUTO_INCREMENT,
   `point_name` VARCHAR(30) NOT NULL,
   `discount` INT NULL,
