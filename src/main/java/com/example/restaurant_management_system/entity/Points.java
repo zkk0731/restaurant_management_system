@@ -15,15 +15,12 @@ public class Points {
 	@Column(name = "point_id")
 	private int pointId;
 
-	@Id
 	@Column(name = "point_name")
 	private String pointName;
 
-	@Id
 	@Column(name = "discount")
 	private int discount;
 
-	@Id
 	@Column(name = "points_cost")
 	private int pointsCost;
 
