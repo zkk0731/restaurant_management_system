@@ -43,9 +43,9 @@ public class SellerController {
 		if (!StringUtils.hasText(req.getPointName())) {
 			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
 		}
-		// 折扣不可小於0
-		if (req.getDiscount() < 0) {
-//		if (req.getDiscount() < 1 || req.getDiscount() > 99) {
+		
+		// 折扣範圍1折~99折
+		if (req.getDiscount() < 1 || req.getDiscount() > 99) {
 			return new SellerRes(RtnCode.DISCOUNT_ERROR.getMessage());
 		}
 
