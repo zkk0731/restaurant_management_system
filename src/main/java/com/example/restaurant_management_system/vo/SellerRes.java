@@ -2,6 +2,7 @@ package com.example.restaurant_management_system.vo;
 
 import java.util.Map;
 
+import com.example.restaurant_management_system.entity.Points;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,7 +10,7 @@ public class SellerRes {
 
 	private String commodityName;
 
-	private int price;
+	private Integer price;
 
 	private String category;
 
@@ -21,8 +22,14 @@ public class SellerRes {
 
 	private String message;
 
+	private Points points;
+
 	public SellerRes() {
 
+	}
+
+	public SellerRes(String message) {
+		this.message = message;
 	}
 
 	public String getCommodityName() {
@@ -33,11 +40,11 @@ public class SellerRes {
 		this.commodityName = commodityName;
 	}
 
-	public int getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 
@@ -79,6 +86,14 @@ public class SellerRes {
 
 	public void setOrderInfoMap(Map<String, Integer> orderInfoMap) {
 		this.orderInfoMap = orderInfoMap;
+	}
+
+	public Points getPoints() {
+		return points;
+	}
+
+	public void setPoints(Points points) {
+		this.points = points;
 	}
 
 }

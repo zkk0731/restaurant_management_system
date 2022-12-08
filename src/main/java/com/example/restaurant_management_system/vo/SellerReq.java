@@ -15,6 +15,14 @@ public class SellerReq {
 
 	private String customerEmail;
 
+	@JsonProperty("point_name")
+	private String pointName;
+
+	private int discount;
+
+	@JsonProperty("points_cost")
+	private int pointsCost;
+
 	@JsonProperty("start_date_time")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime startDateTime;
@@ -73,6 +81,30 @@ public class SellerReq {
 
 	public void setEndDateTime(LocalDateTime endDateTime) {
 		this.endDateTime = endDateTime;
+	}
+
+	public String getPointName() {
+		return pointName;
+	}
+
+	public void setPointName(String pointName) {
+		this.pointName = pointName;
+	}
+
+	public int getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
+
+	public int getPointsCost() {
+		return pointsCost;
+	}
+
+	public void setPointsCost(int pointsCost) {
+		this.pointsCost = pointsCost;
 	}
 
 }

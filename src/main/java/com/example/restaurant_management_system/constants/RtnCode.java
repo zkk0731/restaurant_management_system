@@ -5,7 +5,9 @@ public enum RtnCode {
 	ACCOUNT_EXIST("403", "帳號已存在"),
 	PARAMETER_ERROR("403", "資料格式錯誤"),
 	PARAMETER_REQUIRED("403", "所需資料缺失"),
-	CATEGORY_ISNOT_EXIST("403", "分類不存在");
+	CATEGORY_ISNOT_EXIST("403", "分類不存在"),
+	POINTNAME_EXIST("403", "名稱已存在"),
+	DISCOUNT_ERROR("403", "折扣輸入錯誤");
 	
 	
 	private String code;

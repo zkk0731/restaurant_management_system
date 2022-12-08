@@ -16,8 +16,8 @@ public interface CustomerService {
 
 	// 餐點分類查詢
 	public CustomerRes searchCategory(String category);
-	
-	//創建會員	
+
+	// 創建會員
 	public CustomerRes createMember(CustomerReq req);
 
 }

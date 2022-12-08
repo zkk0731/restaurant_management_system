@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "points_exchange")
 public class Points {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "point_id")
@@ -26,6 +27,12 @@ public class Points {
 
 	public Points() {
 
+	}
+
+	public Points(String pointName, int discount, int pointsCost) {
+		this.pointName = pointName;
+		this.discount = discount;
+		this.pointsCost = pointsCost;
 	}
 
 	public int getPointId() {
