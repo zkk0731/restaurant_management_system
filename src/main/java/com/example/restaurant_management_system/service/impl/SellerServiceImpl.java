@@ -107,7 +107,7 @@ public class SellerServiceImpl implements SellerService {
 
 		// 判別使用者權限
 		if (!getMemberAccount.isAuthority()) {
-			// 權限為會員
+			// If條件判別權限為會員
 			List<Orders> memberUncheckOrders = new ArrayList<Orders>();
 
 			// 從uncheckedOrders取出特定會員所有未確認的訂單資料
@@ -119,7 +119,7 @@ public class SellerServiceImpl implements SellerService {
 			return new ProcessOrderRes(memberUncheckOrders, RtnCode.SUCCESS.getMessage());
 
 		} else if (getMemberAccount.isAuthority()) {
-			// 權限為店家，設定回傳資料
+			// If條件判別權限為店家，設定回傳資料
 			return new ProcessOrderRes(uncheckedOrders, RtnCode.SUCCESS.getMessage());
 		}
 
