@@ -25,6 +25,10 @@ public class SellerRes {
 
 	}
 
+	public SellerRes(String message) {
+		this.message = message;
+	}
+
 	public String getCommodityName() {
 		return commodityName;
 	}

@@ -12,5 +12,9 @@ import com.example.restaurant_management_system.entity.Orders;
 public interface OrdersDao extends JpaRepository<Orders, Integer> {
 
 	public List<Orders> findByOrderDatetimeBetween(LocalDateTime startDate, LocalDateTime endDate);
+	
+//	public List<Orders> findByUncheckedOrder();
+
+	public List<Orders> findByOrderState(String orderState);
 
 }

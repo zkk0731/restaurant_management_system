@@ -1,6 +1,7 @@
 package com.example.restaurant_management_system.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,18 +9,32 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.example.restaurant_management_system.constants.RtnCode;
+import com.example.restaurant_management_system.entity.Members;
+import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.entity.Orders;
+import com.example.restaurant_management_system.repository.MembersDao;
+import com.example.restaurant_management_system.repository.MenuDao;
 import com.example.restaurant_management_system.repository.OrdersDao;
 import com.example.restaurant_management_system.service.ifs.SellerService;
 import com.example.restaurant_management_system.vo.SellerRes;
+import com.example.restaurant_management_system.vo.ProcessOrderReq;
+import com.example.restaurant_management_system.vo.ProcessOrderRes;
+import com.example.restaurant_management_system.vo.SellerReq;
 
 @Service
 public class SellerServiceImpl implements SellerService {
 
 	@Autowired
 	private OrdersDao ordersDao;
+
+	@Autowired
+	private MenuDao menuDao;
+
+	@Autowired
+	private MembersDao membersDao;
 
 //	訂單資訊字串轉Map型態
 	public Map<String, Integer> orderInfoStrToMap(Orders orders) {
@@ -74,6 +89,69 @@ public class SellerServiceImpl implements SellerService {
 		res.setMessage(RtnCode.SUCCESS.getMessage());
 
 		return res;
+	}
+
+	// 未確認訂單查詢
+	@Override
+	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req) {
+		// 取出資料庫中會員資料
+		Members getMemberAccount = membersDao.findByMemberAccount(req.getMemberAccount());
+
+		// 判別使用者輸入的帳號是否存在
+		if (!StringUtils.hasText(getMemberAccount.getMemberAccount())) {
+			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		// 取出資料庫中所有未確認的訂單資料
+		List<Orders> uncheckedOrders = ordersDao.findByOrderState("unchecked");
+
+		// 判別使用者權限
+		if (!getMemberAccount.isAuthority()) {
+			// 權限為會員
+			List<Orders> memberUncheckOrders = new ArrayList<Orders>();
+
+			// 從uncheckedOrders取出特定會員所有未確認的訂單資料
+			for (Orders item : uncheckedOrders) {
+				if (item.getMemberAccount().equalsIgnoreCase(req.getMemberAccount())) {
+					memberUncheckOrders.add(item);
+				}
+			}
+			return new ProcessOrderRes(memberUncheckOrders, RtnCode.SUCCESS.getMessage());
+
+		} else if (getMemberAccount.isAuthority()) {
+			// 權限為店家，設定回傳資料
+			return new ProcessOrderRes(uncheckedOrders, RtnCode.SUCCESS.getMessage());
+		}
+
+		return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+	}
+
+	// 取消訂單
+	@Override
+	public ProcessOrderRes cancelOrder(ProcessOrderReq req) {
+		// 判別使用者輸入的訂單流水號 1. 是否為空 2. 是否存在於資料庫
+
+		// 將訂單狀態更動為 canceled
+
+		return null;
+	}
+
+	// 建立餐點品項
+	@Override
+	public SellerRes createCommodtity(SellerReq req) {
+		// 判別使用者輸入內容 1. 品項名稱不為空 2. 價格不得小於零 3. 分類不為空 4.品項名稱不重複 （重複直接覆蓋掉？）
+		if (!StringUtils.hasText(req.getCommodityName()) || req.getPrice() <= 0
+				|| !StringUtils.hasText(req.getCategory())) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		// 4.品項名稱不重複 （重複直接覆蓋掉？當作update）（待寫）
+
+		// 將輸入的餐點品項儲存至資料庫
+		Menu menu = new Menu(req.getCommodityName(), req.getPrice(), req.getCategory());
+		menuDao.save(menu);
+
+		return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
 	}
 
 }
