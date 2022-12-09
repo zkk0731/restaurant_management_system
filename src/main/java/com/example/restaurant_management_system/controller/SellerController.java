@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.restaurant_management_system.constants.RtnCode;
 import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.service.ifs.SellerService;
+import com.example.restaurant_management_system.vo.ProcessOrderReq;
+import com.example.restaurant_management_system.vo.ProcessOrderRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -59,6 +61,12 @@ public class SellerController {
 	@PostMapping(value = "/readPointsExchange")
 	public List<Points> readPointsExchange() {
 		return sellerService.readPointsExchange();
+	}
+	
+	// 未確認訂單查詢
+	@PostMapping(value = "/searchUncheckedOrder")
+	public ProcessOrderRes searchUncheckedOrder(@RequestBody ProcessOrderReq req) {
+		return sellerService.searchUncheckedOrder(req);
 	}
 
 }

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `authority` tinyint NOT NULL,
   `member_name` varchar(30) NOT NULL,
   `phone` varchar(12) NOT NULL,
-  `age_range` int DEFAULT NULL,
+  `age_range` int DEFAULT '0',
   `line_id` varchar(30) DEFAULT NULL,
   `email` varchar(30) DEFAULT NULL,
   `points` int DEFAULT '0',

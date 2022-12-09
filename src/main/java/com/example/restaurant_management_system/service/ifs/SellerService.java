@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.restaurant_management_system.entity.Points;
+import com.example.restaurant_management_system.vo.ProcessOrderReq;
+import com.example.restaurant_management_system.vo.ProcessOrderRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -17,5 +19,8 @@ public interface SellerService {
 
 	// 讀取點數兌換
 	public List<Points> readPointsExchange();
+
+	// 未確認訂單查詢
+	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req);
 
 }

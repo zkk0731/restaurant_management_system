@@ -1,6 +1,7 @@
 package com.example.restaurant_management_system.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,13 +9,18 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.example.restaurant_management_system.constants.RtnCode;
+import com.example.restaurant_management_system.entity.Members;
 import com.example.restaurant_management_system.entity.Orders;
 import com.example.restaurant_management_system.entity.Points;
+import com.example.restaurant_management_system.repository.MembersDao;
 import com.example.restaurant_management_system.repository.OrdersDao;
 import com.example.restaurant_management_system.repository.PointsDao;
 import com.example.restaurant_management_system.service.ifs.SellerService;
+import com.example.restaurant_management_system.vo.ProcessOrderReq;
+import com.example.restaurant_management_system.vo.ProcessOrderRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -26,6 +32,9 @@ public class SellerServiceImpl implements SellerService {
 
 	@Autowired
 	private PointsDao pointDao;
+	
+	@Autowired
+	private MembersDao membersDao;
 
 	// 訂單資訊字串轉Map型態
 	public Map<String, Integer> orderInfoStrToMap(Orders orders) {
@@ -107,6 +116,41 @@ public class SellerServiceImpl implements SellerService {
 	public List<Points> readPointsExchange() {
 		List<Points> pointsList = pointDao.findAll();
 		return pointsList;
+	}
+	
+	// 未確認訂單查詢
+	@Override
+	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req) {
+		// 取出資料庫中會員資料
+		Members getMemberAccount = membersDao.findByMemberAccount(req.getMemberAccount());
+
+		// 判別使用者輸入的帳號是否存在
+		if (!StringUtils.hasText(getMemberAccount.getMemberAccount())) {
+			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		// 取出資料庫中所有未確認的訂單資料
+		List<Orders> uncheckedOrders = ordersDao.findByOrderState("unchecked");
+
+		// 判別使用者權限
+		if (!getMemberAccount.isAuthority()) {
+			// If條件判別權限為會員
+			List<Orders> memberUncheckOrders = new ArrayList<Orders>();
+
+			// 從uncheckedOrders取出特定會員所有未確認的訂單資料
+			for (Orders item : uncheckedOrders) {
+				if (item.getMemberAccount().equalsIgnoreCase(req.getMemberAccount())) {
+					memberUncheckOrders.add(item);
+				}
+			}
+			return new ProcessOrderRes(memberUncheckOrders, RtnCode.SUCCESS.getMessage());
+
+		} else if (getMemberAccount.isAuthority()) {
+			// If條件判別權限為店家，設定回傳資料
+			return new ProcessOrderRes(uncheckedOrders, RtnCode.SUCCESS.getMessage());
+		}
+
+		return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
 	}
 
 }
