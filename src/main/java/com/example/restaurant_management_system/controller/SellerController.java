@@ -1,5 +1,7 @@
 package com.example.restaurant_management_system.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restaurant_management_system.constants.RtnCode;
+import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.service.ifs.SellerService;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
@@ -43,13 +46,19 @@ public class SellerController {
 		if (!StringUtils.hasText(req.getPointName())) {
 			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
 		}
-		
+
 		// 折扣範圍1折~99折
 		if (req.getDiscount() < 1 || req.getDiscount() > 99) {
 			return new SellerRes(RtnCode.DISCOUNT_ERROR.getMessage());
 		}
 
 		return sellerService.createPointsExchange(req);
+	}
+
+	// 讀取點數兌換
+	@PostMapping(value = "/readPointsExchange")
+	public List<Points> readPointsExchange() {
+		return sellerService.readPointsExchange();
 	}
 
 }

@@ -102,4 +102,11 @@ public class SellerServiceImpl implements SellerService {
 		return res;
 	}
 
+	// 讀取點數兌換
+	@Override
+	public List<Points> readPointsExchange() {
+		List<Points> pointsList = pointDao.findAll();
+		return pointsList;
+	}
+
 }

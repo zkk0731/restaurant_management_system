@@ -23,6 +23,8 @@ public class CustomerReq {
 	private int costPoints;
 
 	private Map<String, Integer> orderInfoMap;
+	
+	
 
 	public CustomerReq() {
 

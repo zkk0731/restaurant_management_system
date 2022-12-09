@@ -1,6 +1,9 @@
 package com.example.restaurant_management_system.service.ifs;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -11,4 +14,8 @@ public interface SellerService {
 
 	// 創建點數兌換
 	public SellerRes createPointsExchange(SellerReq req);
+
+	// 讀取點數兌換
+	public List<Points> readPointsExchange();
+
 }
