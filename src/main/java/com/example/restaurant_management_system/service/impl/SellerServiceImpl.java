@@ -32,7 +32,7 @@ public class SellerServiceImpl implements SellerService {
 
 	@Autowired
 	private PointsDao pointDao;
-	
+
 	@Autowired
 	private MembersDao membersDao;
 
@@ -117,7 +117,7 @@ public class SellerServiceImpl implements SellerService {
 		List<Points> pointsList = pointDao.findAll();
 		return pointsList;
 	}
-	
+
 	// 未確認訂單查詢
 	@Override
 	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req) {
@@ -151,6 +151,33 @@ public class SellerServiceImpl implements SellerService {
 		}
 
 		return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+	}
+
+	// 取消訂單
+	@Override
+	public ProcessOrderRes cancelOrder(ProcessOrderReq req) {
+
+		// 從取出資料庫中取出訂單資料
+		Orders order = ordersDao.findByOrderId(req.getOrderId());
+
+		// 判別使用者輸入的訂單 1. 訂單流水好是否為空 2. 訂單是否存在於資料庫 3. 訂單狀態是否為canceled
+		if (req.getOrderId() == 0) {
+			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+		} else if (order == null) {
+			return new ProcessOrderRes(RtnCode.ORDER_NOT_EXIST.getMessage());
+		} else if (order.getOrderState().equalsIgnoreCase("canceled")) {
+			return new ProcessOrderRes(RtnCode.ORDER_HAS_CANCELED.getMessage());
+		}
+
+		// 將訂單狀態更動為 canceled
+		order.setOrderState("canceled");
+		ordersDao.save(order);
+
+		// 設定res
+		List<Orders> orderInfo = new ArrayList<>();
+		orderInfo.add(order);
+
+		return new ProcessOrderRes(orderInfo, RtnCode.SUCCESS.getMessage());
 	}
 
 }

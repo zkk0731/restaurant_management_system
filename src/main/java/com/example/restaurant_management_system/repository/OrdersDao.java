@@ -14,5 +14,7 @@ public interface OrdersDao extends JpaRepository<Orders, Integer> {
 	public List<Orders> findByOrderDatetimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 	
 	public List<Orders> findByOrderState(String orderState);
-
+	
+	public Orders findByOrderId(int orderId);
+	
 }

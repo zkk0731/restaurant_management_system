@@ -62,11 +62,17 @@ public class SellerController {
 	public List<Points> readPointsExchange() {
 		return sellerService.readPointsExchange();
 	}
-	
+
 	// 未確認訂單查詢
 	@PostMapping(value = "/searchUncheckedOrder")
 	public ProcessOrderRes searchUncheckedOrder(@RequestBody ProcessOrderReq req) {
 		return sellerService.searchUncheckedOrder(req);
+	}
+
+	// 取消訂單
+	@PostMapping(value = "/cancel_order")
+	public ProcessOrderRes cancelOrder(@RequestBody ProcessOrderReq req) {
+		return sellerService.cancelOrder(req);
 	}
 
 }
