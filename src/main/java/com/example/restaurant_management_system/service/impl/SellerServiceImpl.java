@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.util.StringUtils;
 
 import com.example.restaurant_management_system.constants.RtnCode;
 import com.example.restaurant_management_system.entity.Members;
+import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.entity.Orders;
 import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.repository.MembersDao;
+import com.example.restaurant_management_system.repository.MenuDao;
 import com.example.restaurant_management_system.repository.OrdersDao;
 import com.example.restaurant_management_system.repository.PointsDao;
 import com.example.restaurant_management_system.service.ifs.SellerService;
@@ -35,6 +38,9 @@ public class SellerServiceImpl implements SellerService {
 
 	@Autowired
 	private MembersDao membersDao;
+
+	@Autowired
+	private MenuDao menuDao;
 
 	// 訂單資訊字串轉Map型態
 	public Map<String, Integer> orderInfoStrToMap(Orders orders) {
@@ -178,6 +184,27 @@ public class SellerServiceImpl implements SellerService {
 		orderInfo.add(order);
 
 		return new ProcessOrderRes(orderInfo, RtnCode.SUCCESS.getMessage());
+	}
+
+	// 建立餐點品項
+	@Override
+	public SellerRes createCommodity(SellerReq req) {
+		// 判別使用者輸入內容 1. 價格不得小於零 2. 品項名稱不得為空 3. 品項分類不得為空 4. 品項名稱不重複
+		if (req.getPrice() <= 0 || !StringUtils.hasText(req.getCommodityName())
+				|| !StringUtils.hasText(req.getCategory())) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		Optional<Menu> menuFromDB = menuDao.findById(req.getCommodityName());
+		if (!menuFromDB.isEmpty()) {
+			return new SellerRes(RtnCode.COMMODITY_EXIST.getMessage());
+		}
+
+		// 回傳餐點資訊
+		Menu menu = new Menu(req.getCommodityName(), req.getPrice(), req.getCategory());
+		menuDao.save(menu);
+
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
 	}
 
 }

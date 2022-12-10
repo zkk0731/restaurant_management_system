@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SellerReq {
 
+	@JsonProperty("commodity_name")
 	private String commodityName;
 
 	private int price;
@@ -33,6 +34,12 @@ public class SellerReq {
 
 	public SellerReq() {
 
+	}
+
+	public SellerReq(String commodityName, int price, String category) {
+		this.commodityName = commodityName;
+		this.price = price;
+		this.category = category;
 	}
 
 	public LocalDateTime getStartDateTime() {

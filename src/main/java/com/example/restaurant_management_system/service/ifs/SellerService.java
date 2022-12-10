@@ -25,5 +25,8 @@ public interface SellerService {
 	
 	// 取消訂單
 	public ProcessOrderRes cancelOrder(ProcessOrderReq req);
+	
+	// 建立餐點品項
+	public SellerRes createCommodity(SellerReq req);
 
 }

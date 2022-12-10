@@ -9,14 +9,15 @@ public enum RtnCode {
 	POINTNAME_EXIST("403", "名稱已存在"),
 	DISCOUNT_ERROR("403", "折扣輸入錯誤"),
 	ORDER_NOT_EXIST("403", "訂單不存在"),
-	ORDER_HAS_CANCELED("403", "訂單已是取消狀態");
+	ORDER_HAS_CANCELED("403", "訂單已是取消狀態"),
+	COMMODITY_EXIST("403", "餐點已存在");
 
 	
 	private String code;
 	
 	private String message;
 
-	private RtnCode(String code,String message) {
+	private RtnCode(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}

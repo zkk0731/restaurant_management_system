@@ -75,4 +75,9 @@ public class SellerController {
 		return sellerService.cancelOrder(req);
 	}
 
+	// 建立餐點品項
+	@PostMapping(value = "/create_commodity")
+	public SellerRes createCommodity(@RequestBody SellerReq req) {
+		return sellerService.createCommodity(req);
+	}
 }

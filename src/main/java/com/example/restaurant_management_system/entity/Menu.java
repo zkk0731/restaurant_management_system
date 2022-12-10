@@ -22,6 +22,16 @@ public class Menu {
 	@Column(name = "sales_volume")
 	private int salesVolume;
 
+	public Menu() {
+
+	}
+
+	public Menu(String commodityName, int price, String category) {
+		this.commodityName = commodityName;
+		this.price = price;
+		this.category = category;
+	}
+
 	public String getCommodityName() {
 		return commodityName;
 	}
