@@ -45,9 +45,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	// 點餐
 	@Override
-	public CustomerRes customerOrder(CustomerReq req) {
+	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account) {
 		CustomerRes res = new CustomerRes();
-		Map<String, Integer> orderInfoMap = req.getOrderInfoMap();
+		
+		//將Map轉成String 並去掉前後括號
 		String orderInfoString = orderInfoMap.toString().substring(1, orderInfoMap.toString().length() - 1);
 
 		int totalPrice = calculateTotalPrice(orderInfoMap);
@@ -55,15 +56,8 @@ public class CustomerServiceImpl implements CustomerService {
 		orders.setTotalPrice(totalPrice);
 
 		// 確認是否為會員
-		if (StringUtils.hasText(req.getMemberAccount())) {
-			Members memberInfo = membersDao.findByMemberAccount(req.getMemberAccount());
-			orders.setMemberAccount(req.getMemberAccount());
-
-			// 點數兌換及獲得
-			pointsGetAndExchange(req.getCostPoints(), memberInfo, orders, res);
-
-			membersDao.save(memberInfo);
-
+		if (StringUtils.hasText(account)) {
+			orders.setMemberAccount(account);
 		}
 
 		ordersDao.save(orders);
@@ -76,7 +70,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	// 計算總金額
-	private int calculateTotalPrice(Map<String, Integer> orderInfoMap) {
+	@Override
+	public int calculateTotalPrice(Map<String, Integer> orderInfoMap) {
 		List<Menu> menuList = menuDao.findAll();
 		int totalPrice = 0;
 
@@ -86,8 +81,8 @@ public class CustomerServiceImpl implements CustomerService {
 					totalPrice += menu.getPrice() * item.getValue();
 
 					// 將購買數量加進菜單中的銷量
-					menu.setSalesVolume(menu.getSalesVolume() + item.getValue());
-					menuDao.save(menu);
+//					menu.setSalesVolume(menu.getSalesVolume() + item.getValue());
+//					menuDao.save(menu);
 				}
 			}
 		}
@@ -193,5 +188,34 @@ public class CustomerServiceImpl implements CustomerService {
 		if (req.getMemberLineId() != null) {
 			member.setLineId(req.getMemberLineId());
 		}
+	}
+
+	@Override
+	public Members login(CustomerReq req) {
+		
+		//判斷帳號密碼是否正確
+		return membersDao.findByMemberAccountAndPwd(req.getMemberAccount(), req.getMemberPwd());
+		
+	}
+
+	//查詢會員資料及訂單
+	@Override
+	public CustomerRes searchMemberInfo(String account) {
+		CustomerRes res = new CustomerRes();
+		
+		Members member = membersDao.findByMemberAccount(account);
+		List<Orders> orders = ordersDao.findByMemberAccount(account);
+		
+		res.setMember(member);
+		
+		//判斷會員是否有消費紀錄
+		if(orders == null) {
+			res.setMessage(RtnCode.NO_ORDERS_RECORD.getMessage());
+			return res;
+		}
+		
+		res.setOrders(orders);
+		res.setMessage(RtnCode.SUCCESS.getMessage());
+		return res;
 	}
 }

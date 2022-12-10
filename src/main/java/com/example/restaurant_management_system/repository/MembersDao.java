@@ -9,5 +9,7 @@ import com.example.restaurant_management_system.entity.Members;
 public interface MembersDao extends JpaRepository<Members, Integer> {
 
 	public Members findByMemberAccount(String memberAccount);
+	
+	public Members findByMemberAccountAndPwd(String memberAccount, String pwd);
 
 }

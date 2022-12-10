@@ -2,6 +2,8 @@ package com.example.restaurant_management_system.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -10,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restaurant_management_system.constants.RtnCode;
+import com.example.restaurant_management_system.entity.Members;
 import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.service.ifs.CustomerService;
 import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
+import com.example.restaurant_management_system.vo.ShoppingCart;
 
 @RestController
 public class CustomerController {
@@ -29,14 +33,14 @@ public class CustomerController {
 
 	// 點餐
 	@PostMapping(value = "/customerOrder")
-	public CustomerRes customerOrder(@RequestBody CustomerReq req) {
+	public CustomerRes customerOrder(@RequestBody CustomerReq req, HttpSession session) {
 		CustomerRes res = new CustomerRes();
 		if (CollectionUtils.isEmpty(req.getOrderInfoMap())) {
 			res.setMessage(RtnCode.PARAMETER_REQUIRED.getMessage());
 			return res;
 		}
 
-		return customerService.customerOrder(req);
+		return customerService.customerOrder(req.getOrderInfoMap(), session.getAttribute("account").toString());
 	}
 
 	// 餐點分類查詢
@@ -83,5 +87,102 @@ public class CustomerController {
 
 		return null;
 	}
+	
+	//登入
+	@PostMapping(value = "/login")
+	public CustomerRes login(@RequestBody CustomerReq req, HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		
+		//判斷所需資料
+		if(!StringUtils.hasText(req.getMemberAccount()) || !StringUtils.hasText(req.getMemberPwd())) {
+			res.setMessage(RtnCode.PARAMETER_REQUIRED.getMessage());
+			return res;
+		}
+		
+		Members result = customerService.login(req);
+		
+		//帳號或密碼錯誤
+		if(result == null) {
+			res.setMessage(RtnCode.ACCOUNT_OR_PWD_ERROR.getMessage());
+			return res;
+		}
+		
+		//登入成功將帳號存入暫存
+		session.setAttribute("account", req.getMemberAccount());
+		
+		//判斷登入權限是否為店家
+		if(result.isAuthority()) {
+			res.setMessage(RtnCode.LOGIN_SELLER_SUCCESSFUL.getMessage());
+			return res;
+		}
+		
+		res.setMessage(RtnCode.LOGIN_MEMBER_SUCCESSFUL.getMessage());
+		return res;
+	}
 
+	//顯示登入帳號
+	@PostMapping(value = "/show_login_account")
+	public CustomerRes showLoginAccount(HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		
+		//判斷是否為登入狀態
+		if(session.getAttribute("account") == null) {
+			res.setMessage(RtnCode.NOT_LOGIN.getMessage());
+			return res;
+		}
+		res.setMessage("歡迎" + session.getAttribute("account").toString());
+		return res;
+	}
+	
+	//登出
+	@PostMapping(value = "/logout")
+	public CustomerRes logout(HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		
+		//未登入則無法登出
+		if(session.getAttribute("account") == null) {
+			res.setMessage(RtnCode.NOT_LOGIN.getMessage());
+			return res;
+		}
+		
+		session.removeAttribute("account");
+		
+		res.setMessage(RtnCode.SUCCESS.getMessage());
+		return res;
+	}
+	
+	//購物車
+	@PostMapping(value = "/shopping_cart")
+	public CustomerRes shoppingCart(@RequestBody CustomerReq req, HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		
+		if(CollectionUtils.isEmpty(req.getOrderInfoMap())) {
+			res.setMessage(RtnCode.SHOPPING_CART_IS_EMPTY.getMessage());
+			return res;
+		}
+		
+		int totalPrice = customerService.calculateTotalPrice(req.getOrderInfoMap());
+		
+		ShoppingCart shoppingCart = new ShoppingCart(req.getOrderInfoMap(), totalPrice);
+		
+		res.setOrderInfoMap(req.getOrderInfoMap());
+		res.setTotalPrice(totalPrice);
+		session.setAttribute("shoppingCart", shoppingCart);
+		
+		return res;
+	}
+	
+	//查詢會員資訊及訂單
+	@PostMapping(value = "/search_member_info")
+	public CustomerRes searchMemberInfo(HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		
+		//判斷是否登入
+		if(session.getAttribute("account") == null) {
+			res.setMessage(RtnCode.NOT_LOGIN.getMessage());
+			return res;
+		}
+		
+		return customerService.searchMemberInfo(session.getAttribute("account").toString());
+	}
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.example.restaurant_management_system.entity.Members;
 import com.example.restaurant_management_system.entity.Menu;
+import com.example.restaurant_management_system.entity.Orders;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -29,6 +30,8 @@ public class CustomerRes {
 	private Set<Menu> menuSet;
 	
 	private Members member;
+	
+	private List<Orders> orders;
 
 	public CustomerRes() {
 
@@ -108,6 +111,14 @@ public class CustomerRes {
 
 	public void setMenuSet(Set<Menu> menuSet) {
 		this.menuSet = menuSet;
+	}
+
+	public List<Orders> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Orders> orders) {
+		this.orders = orders;
 	}
 
 }

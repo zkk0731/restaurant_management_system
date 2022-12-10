@@ -36,7 +36,7 @@ public class OrderTest {
 //		req.setMemberAccount("AA");
 //		req.setCostPoints(1);
 		
-		CustomerRes res = customerService.customerOrder(req);
+		CustomerRes res = customerService.customerOrder(orderInfoMap,null);
 		System.out.println(res.getMessage());
 		System.out.println(res.getPointsExchangeMessage());
 
