@@ -14,6 +14,7 @@ import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.service.ifs.SellerService;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -79,5 +80,11 @@ public class SellerController {
 	@PostMapping(value = "/create_commodity")
 	public SellerRes createCommodity(@RequestBody SellerReq req) {
 		return sellerService.createCommodity(req);
+	}
+
+	// 顯示餐點品項
+	@PostMapping(value = "/read_commodtity")
+	public ReadCommodtityRes readCommodtity(@RequestBody SellerReq req) {
+		return sellerService.readCommodtity(req);
 	}
 }

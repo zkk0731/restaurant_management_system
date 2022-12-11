@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -22,11 +23,13 @@ public interface SellerService {
 
 	// 未確認訂單查詢
 	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req);
-	
+
 	// 取消訂單
 	public ProcessOrderRes cancelOrder(ProcessOrderReq req);
-	
+
 	// 建立餐點品項
 	public SellerRes createCommodity(SellerReq req);
 
+	// 顯示餐點品項
+	public ReadCommodtityRes readCommodtity(SellerReq req);
 }

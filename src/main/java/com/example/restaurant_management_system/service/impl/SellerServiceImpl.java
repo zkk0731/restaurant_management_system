@@ -24,6 +24,7 @@ import com.example.restaurant_management_system.repository.PointsDao;
 import com.example.restaurant_management_system.service.ifs.SellerService;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -205,6 +206,19 @@ public class SellerServiceImpl implements SellerService {
 		menuDao.save(menu);
 
 		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 顯示餐點品項
+	@Override
+	public ReadCommodtityRes readCommodtity(SellerReq req) {
+		// 判別使用者輸入內容，輸入之餐點分類不得為空
+		if (!StringUtils.hasText(req.getCategory())) {
+			return new ReadCommodtityRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		// 從資料庫取出特定類別的所有餐點
+		List<Menu> getMenusByCategory = menuDao.findByCategory(req.getCategory());
+		return new ReadCommodtityRes(getMenusByCategory, RtnCode.SUCCESS.getMessage());
 	}
 
 }
