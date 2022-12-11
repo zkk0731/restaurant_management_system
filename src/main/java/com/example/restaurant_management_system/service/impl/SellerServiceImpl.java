@@ -215,10 +215,48 @@ public class SellerServiceImpl implements SellerService {
 		if (!StringUtils.hasText(req.getCategory())) {
 			return new ReadCommodtityRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
-		
+
 		// 從資料庫取出特定類別的所有餐點
 		List<Menu> getMenusByCategory = menuDao.findByCategory(req.getCategory());
 		return new ReadCommodtityRes(getMenusByCategory, RtnCode.SUCCESS.getMessage());
+	}
+
+	// 更新點數兌換
+	@Override
+	public SellerRes updatePointsExchange(SellerReq req) {
+		Points points = pointDao.findByPointName(req.getPointName());
+
+		if (!StringUtils.hasText(req.getPointName()) || req.getDiscount() <= 0 || req.getPointsCost() <= 0) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		if (points == null) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		points.setDiscount(req.getDiscount());
+		points.setPointsCost(req.getPointsCost());
+		pointDao.save(points);
+
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 刪除點數兌換
+	@Override
+	public SellerRes deletePointsExchange(SellerReq req) {
+		Points points = pointDao.findByPointName(req.getPointName());
+
+		if (!StringUtils.hasText(req.getPointName())) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		if (points == null) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		pointDao.delete(points);
+
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
 	}
 
 }

@@ -32,4 +32,10 @@ public interface SellerService {
 
 	// 顯示餐點品項
 	public ReadCommodtityRes readCommodtity(SellerReq req);
+
+	// 更新點數兌換
+	public SellerRes updatePointsExchange(SellerReq req);
+
+	// 刪除點數兌換
+	public SellerRes deletePointsExchange(SellerReq req);
 }

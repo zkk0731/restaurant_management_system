@@ -87,4 +87,16 @@ public class SellerController {
 	public ReadCommodtityRes readCommodtity(@RequestBody SellerReq req) {
 		return sellerService.readCommodtity(req);
 	}
+
+	// 更新點數兌換
+	@PostMapping(value = "/update_points_exchange")
+	public SellerRes updatePointsExchange(@RequestBody SellerReq req) {
+		return sellerService.updatePointsExchange(req);
+	}
+
+	// 刪除點數兌換
+	@PostMapping(value = "/delete_points_exchange")
+	public SellerRes deletePointsExchange(@RequestBody SellerReq req) {
+		return sellerService.deletePointsExchange(req);
+	}
 }
