@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	// 點餐
 	@Override
-	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice) {
+	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice, int pointsCost) {
 		CustomerRes res = new CustomerRes();
 		
 		//將Map轉成String 並去掉前後括號
@@ -57,6 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
 		// 確認是否為會員
 		if (StringUtils.hasText(account)) {
 			orders.setMemberAccount(account);
+			orders.setPointsCost(pointsCost);
 		}
 
 		//存入DB

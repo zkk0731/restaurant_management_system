@@ -14,7 +14,7 @@ public interface CustomerService {
 	public List<Menu> searchTop5Commodity();
 
 	// 點餐
-	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice);
+	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice, int pointsCost);
 
 	// 餐點分類查詢
 	public CustomerRes searchCategory(String category);

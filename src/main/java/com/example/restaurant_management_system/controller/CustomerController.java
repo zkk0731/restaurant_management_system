@@ -45,7 +45,8 @@ public class CustomerController {
 		return customerService.customerOrder(shoppingCart.getOrderInfoMap(),
 				//判斷是否為會員
 				session.getAttribute("account") == null ? null : session.getAttribute("account").toString(),
-				shoppingCart.getTotalPrice());
+				shoppingCart.getTotalPrice(),
+				req.getCostPoints());
 	}
 
 	// 餐點分類查詢

@@ -36,7 +36,7 @@ public class OrderTest {
 //		req.setMemberAccount("AA");
 //		req.setCostPoints(1);
 		int total = customerService.calculateTotalPrice(orderInfoMap);
-		CustomerRes res = customerService.customerOrder(orderInfoMap,null,total);
+		CustomerRes res = customerService.customerOrder(orderInfoMap,null,total,0);
 		System.out.println(res.getMessage());
 		System.out.println(res.getPointsExchangeMessage());
 
