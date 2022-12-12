@@ -35,12 +35,17 @@ public class CustomerController {
 	@PostMapping(value = "/customerOrder")
 	public CustomerRes customerOrder(@RequestBody CustomerReq req, HttpSession session) {
 		CustomerRes res = new CustomerRes();
-		if (CollectionUtils.isEmpty(req.getOrderInfoMap())) {
-			res.setMessage(RtnCode.PARAMETER_REQUIRED.getMessage());
+		//將購物車的訂單取出來結帳
+		ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCart");
+		if (shoppingCart == null) {
+			res.setMessage(RtnCode.SHOPPING_CART_IS_EMPTY.getMessage());
 			return res;
 		}
-
-		return customerService.customerOrder(req.getOrderInfoMap(), session.getAttribute("account").toString());
+		
+		return customerService.customerOrder(shoppingCart.getOrderInfoMap(),
+				//判斷是否為會員
+				session.getAttribute("account") == null ? null : session.getAttribute("account").toString(),
+				shoppingCart.getTotalPrice());
 	}
 
 	// 餐點分類查詢
@@ -93,6 +98,12 @@ public class CustomerController {
 	public CustomerRes login(@RequestBody CustomerReq req, HttpSession session) {
 		CustomerRes res = new CustomerRes();
 		
+		//如果已經登入 需先登出
+		if(session.getAttribute("account") != null) {
+			res.setMessage(RtnCode.ALREADY_LOGIN.getMessage());
+			return res;
+		}
+				
 		//判斷所需資料
 		if(!StringUtils.hasText(req.getMemberAccount()) || !StringUtils.hasText(req.getMemberPwd())) {
 			res.setMessage(RtnCode.PARAMETER_REQUIRED.getMessage());
@@ -112,10 +123,12 @@ public class CustomerController {
 		
 		//判斷登入權限是否為店家
 		if(result.isAuthority()) {
+			session.setAttribute("sellerAccount", req.getMemberAccount());
 			res.setMessage(RtnCode.LOGIN_SELLER_SUCCESSFUL.getMessage());
 			return res;
 		}
-		
+		//登入成功將帳號存入暫存
+		session.setAttribute("account", req.getMemberAccount());
 		res.setMessage(RtnCode.LOGIN_MEMBER_SUCCESSFUL.getMessage());
 		return res;
 	}
@@ -140,13 +153,12 @@ public class CustomerController {
 		CustomerRes res = new CustomerRes();
 		
 		//未登入則無法登出
-		if(session.getAttribute("account") == null) {
-			res.setMessage(RtnCode.NOT_LOGIN.getMessage());
-			return res;
-		}
-		
+//		if(session.getAttribute("account") == null) {
+//			res.setMessage(RtnCode.NOT_LOGIN.getMessage());
+//			return res;
+//		}
+		session.removeAttribute("sellerAccount");
 		session.removeAttribute("account");
-		
 		res.setMessage(RtnCode.SUCCESS.getMessage());
 		return res;
 	}
@@ -156,6 +168,7 @@ public class CustomerController {
 	public CustomerRes shoppingCart(@RequestBody CustomerReq req, HttpSession session) {
 		CustomerRes res = new CustomerRes();
 		
+		//判斷是否有品項加入購物車
 		if(CollectionUtils.isEmpty(req.getOrderInfoMap())) {
 			res.setMessage(RtnCode.SHOPPING_CART_IS_EMPTY.getMessage());
 			return res;
@@ -163,12 +176,27 @@ public class CustomerController {
 		
 		int totalPrice = customerService.calculateTotalPrice(req.getOrderInfoMap());
 		
+		//計算購物車內品項總價
 		ShoppingCart shoppingCart = new ShoppingCart(req.getOrderInfoMap(), totalPrice);
 		
 		res.setOrderInfoMap(req.getOrderInfoMap());
 		res.setTotalPrice(totalPrice);
+		
+		//將購物車資訊放入暫存
 		session.setAttribute("shoppingCart", shoppingCart);
 		
+		return res;
+	}
+	
+	//清除購物車
+	@PostMapping(value = "/remove_shopping_cart")
+	public CustomerRes removeShoppingCart(HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		if(session.getAttribute("shoppingCart") != null) {
+			session.removeAttribute("shoppingCart");
+		}
+			
+		res.setMessage(RtnCode.SUCCESS.getMessage());
 		return res;
 	}
 	

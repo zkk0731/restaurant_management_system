@@ -45,13 +45,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	// 點餐
 	@Override
-	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account) {
+	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice) {
 		CustomerRes res = new CustomerRes();
 		
 		//將Map轉成String 並去掉前後括號
 		String orderInfoString = orderInfoMap.toString().substring(1, orderInfoMap.toString().length() - 1);
 
-		int totalPrice = calculateTotalPrice(orderInfoMap);
 		Orders orders = new Orders(orderInfoString, LocalDateTime.now(), "unchecked");
 		orders.setTotalPrice(totalPrice);
 
@@ -60,6 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
 			orders.setMemberAccount(account);
 		}
 
+		//存入DB
 		ordersDao.save(orders);
 
 		res.setOrderInfoMap(orderInfoMap);

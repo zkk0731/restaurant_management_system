@@ -2,6 +2,8 @@ package com.example.restaurant_management_system.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,14 +26,34 @@ public class SellerController {
 	@Autowired
 	private SellerService sellerService;
 
-	@PostMapping(value = "/api/search_sales_volume")
-	public SellerRes searchSalesVolume(@RequestBody SellerReq req) {
+	//判斷店家是否登入
+	private SellerRes checkSellerLogin(HttpSession session) {
+		if(session.getAttribute("sellerAccount") == null) {
+			return new SellerRes(RtnCode.NOT_LOGIN.getMessage());
+		}
+		return null;
+	}
+	
+	
+	//搜尋指定時間內的銷售資訊
+	@PostMapping(value = "/search_sales_volume")
+	public SellerRes searchSalesVolume(@RequestBody SellerReq req, HttpSession session) {
+		SellerRes checkLogin = checkSellerLogin(session);
+		
+		//判斷店家是否登入
+		if(checkLogin != null) {
+			return checkLogin;
+		}
+		
 		SellerRes res = new SellerRes();
+		
+		//判斷輸入資料是否完整
 		if (req.getStartDateTime() == null || req.getEndDateTime() == null) {
 			res.setMessage(RtnCode.PARAMETER_REQUIRED.getMessage());
 			return res;
 		}
 
+		//結束時間不得比開始時間早
 		if (req.getEndDateTime().isBefore(req.getStartDateTime())) {
 			res.setMessage(RtnCode.PARAMETER_ERROR.getMessage());
 			return res;
@@ -42,8 +64,15 @@ public class SellerController {
 
 	// 創建點數兌換
 	@PostMapping(value = "/createPointsExchange")
-	public SellerRes createPointsExchange(@RequestBody SellerReq req) {
+	public SellerRes createPointsExchange(@RequestBody SellerReq req, HttpSession session) {
 
+		SellerRes checkLogin = checkSellerLogin(session);
+		
+		//判斷店家是否登入
+		if(checkLogin != null) {
+			return checkLogin;
+		}
+		
 		// 點數兌換名稱是否存在
 		if (!StringUtils.hasText(req.getPointName())) {
 			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
@@ -65,7 +94,12 @@ public class SellerController {
 	
 	// 未確認訂單查詢
 	@PostMapping(value = "/searchUncheckedOrder")
-	public ProcessOrderRes searchUncheckedOrder(@RequestBody ProcessOrderReq req) {
+	public ProcessOrderRes searchUncheckedOrder(@RequestBody ProcessOrderReq req, HttpSession session) {
+		
+		if(session.getAttribute("sellerAccount") == null) {
+			return new ProcessOrderRes(RtnCode.NOT_LOGIN.getMessage());
+		}
+		
 		return sellerService.searchUncheckedOrder(req);
 	}
 

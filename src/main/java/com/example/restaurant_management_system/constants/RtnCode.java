@@ -11,6 +11,7 @@ public enum RtnCode {
 	ACCOUNT_OR_PWD_ERROR("403", "帳號或密碼錯誤"),
 	LOGIN_MEMBER_SUCCESSFUL("200","登入會員成功"),
 	LOGIN_SELLER_SUCCESSFUL("200","登入店家成功"),
+	ALREADY_LOGIN("403","已有帳號登入，要登入其他帳號請先登出"),
 	NOT_LOGIN("400","尚未登入"),
 	SHOPPING_CART_IS_EMPTY("403", "購物車為空"),
 	NO_ORDERS_RECORD("200", "尚無購買紀錄");
