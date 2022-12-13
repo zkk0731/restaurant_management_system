@@ -8,7 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.example.restaurant_management_system.constants.RtnCode;
@@ -35,7 +39,10 @@ public class SellerServiceImpl implements SellerService {
 	
 	@Autowired
 	private MembersDao membersDao;
-
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
 	// 訂單資訊字串轉Map型態
 	public Map<String, Integer> orderInfoStrToMap(Orders orders) {
 		String orderInfoStr = orders.getOrderInfo();
@@ -151,6 +158,40 @@ public class SellerServiceImpl implements SellerService {
 		}
 
 		return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+	}
+
+	//推播功能
+	@Override
+	public SellerRes sendMessage(SellerReq req) {
+		
+		 SimpleMailMessage message = new SimpleMailMessage();
+		 List<Members> members = membersDao.findAll();
+		 
+		 if(members == null) {
+			 return new SellerRes("無會員資訊");
+		 }
+		 
+		 List<String> emailList = new ArrayList<>();
+		 for(Members item : members) {
+			 if(StringUtils.hasText(item.getEmail())) {
+				 emailList.add(item.getEmail());
+			 }
+		 }
+		 
+		 if(CollectionUtils.isEmpty(emailList)) {
+			 return new SellerRes("無email資訊");
+		 }
+		 
+		 String[] emailArr = emailList.toArray(new String[0]);
+		 
+		 message.setFrom("arashi11031228@gmail.com");
+		 message.setTo(emailArr);
+		 message.setSubject(req.getEmailTitle());
+		 message.setText(req.getEmailMessage());
+		 
+		 mailSender.send(message);
+		 
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
 	}
 
 }

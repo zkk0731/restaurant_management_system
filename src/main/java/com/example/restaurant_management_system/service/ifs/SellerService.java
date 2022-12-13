@@ -22,5 +22,8 @@ public interface SellerService {
 
 	// 未確認訂單查詢
 	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req);
+	
+	//推播功能
+	public SellerRes sendMessage(SellerReq req);
 
 }

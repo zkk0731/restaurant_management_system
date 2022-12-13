@@ -102,5 +102,24 @@ public class SellerController {
 		
 		return sellerService.searchUncheckedOrder(req);
 	}
+	
+	//推播功能
+	@PostMapping(value = "/send_email")
+	public SellerRes sendEmail(@RequestBody SellerReq req, HttpSession session) {
+		SellerRes checkLogin = checkSellerLogin(session);
+		
+		//判斷登入
+		if(checkLogin != null) {
+			return checkLogin;
+		}
+		
+		//判斷所需資料
+		if(!StringUtils.hasText(req.getEmailTitle()) ||
+				!StringUtils.hasText(req.getEmailMessage())) {
+			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		
+		return sellerService.sendMessage(req);	
+	}
 
 }

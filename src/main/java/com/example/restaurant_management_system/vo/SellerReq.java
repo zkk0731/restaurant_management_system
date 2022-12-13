@@ -30,6 +30,10 @@ public class SellerReq {
 	@JsonProperty("end_date_time")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime endDateTime;
+	
+	private String emailMessage;
+	
+	private String emailTitle;
 
 	public SellerReq() {
 
@@ -107,4 +111,22 @@ public class SellerReq {
 		this.pointsCost = pointsCost;
 	}
 
+	public String getEmailMessage() {
+		return emailMessage;
+	}
+
+	public void setEmailMessage(String emailMessage) {
+		this.emailMessage = emailMessage;
+	}
+
+	public String getEmailTitle() {
+		return emailTitle;
+	}
+
+	public void setEmailTitle(String emailTitle) {
+		this.emailTitle = emailTitle;
+	}
+
+	
+	
 }
