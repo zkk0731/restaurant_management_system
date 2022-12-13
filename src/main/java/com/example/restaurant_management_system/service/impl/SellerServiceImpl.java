@@ -141,7 +141,7 @@ public class SellerServiceImpl implements SellerService {
 		Members getMemberAccount = membersDao.findByMemberAccount(req.getMemberAccount());
 
 		// 判別使用者輸入的帳號是否存在
-		if (!StringUtils.hasText(getMemberAccount.getMemberAccount())) {
+		if (getMemberAccount == null) {
 			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
 
@@ -221,6 +221,7 @@ public class SellerServiceImpl implements SellerService {
 
 		// 將訂單狀態更動為 canceled
 		order.setOrderState("canceled");
+		order.setPointsCost(0);
 		ordersDao.save(order);
 
 		// 設定res

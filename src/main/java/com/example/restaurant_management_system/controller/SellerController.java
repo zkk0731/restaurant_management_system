@@ -95,7 +95,7 @@ public class SellerController {
 	}
 
 	// 未確認訂單查詢
-	@PostMapping(value = "/searchUncheckedOrder")
+	@PostMapping(value = "/search_unchecked_order")
 	public ProcessOrderRes searchUncheckedOrder(@RequestBody ProcessOrderReq req, HttpSession session) {
 
 		if (session.getAttribute("sellerAccount") == null) {

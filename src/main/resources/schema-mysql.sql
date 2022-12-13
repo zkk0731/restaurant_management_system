@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS restaurant_management_system_db;
+
 CREATE TABLE IF NOT EXISTS `members` (
   `member_id` int NOT NULL AUTO_INCREMENT,
   `member_account` varchar(30) NOT NULL,
