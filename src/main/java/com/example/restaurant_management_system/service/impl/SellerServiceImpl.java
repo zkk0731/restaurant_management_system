@@ -22,6 +22,8 @@ import com.example.restaurant_management_system.repository.MenuDao;
 import com.example.restaurant_management_system.repository.OrdersDao;
 import com.example.restaurant_management_system.repository.PointsDao;
 import com.example.restaurant_management_system.service.ifs.SellerService;
+import com.example.restaurant_management_system.vo.CheckOrderReq;
+import com.example.restaurant_management_system.vo.CheckOrderRes;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
 import com.example.restaurant_management_system.vo.ReadCommodtityRes;
@@ -253,10 +255,104 @@ public class SellerServiceImpl implements SellerService {
 		if (points == null) {
 			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
-		
+
 		pointDao.delete(points);
 
 		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 確認訂單
+	@Override
+	public CheckOrderRes checkOrder(CheckOrderReq req) {
+		// 從資料庫取出訂單資訊
+		Optional<Orders> getOrderFromDB = ordersDao.findById(req.getOrderId());
+
+		// 若輸入的訂單不在資料庫內回傳錯誤訊息
+		if (getOrderFromDB.isEmpty()) {
+			return new CheckOrderRes(RtnCode.ORDER_NOT_EXIST.getMessage());
+		}
+
+		Orders order = getOrderFromDB.get();
+
+		// 判別此訂單是否是會員訂單
+		if (StringUtils.hasText(order.getMemberAccount())) {
+			// 得到折扣後價格
+			int afterDiscountTotalPrice = getTotalPriceAfterDiscount(order.getPointsCost(), order.getTotalPrice());
+
+			// 更改 order 的總價格及得到的點數
+			order.setTotalPrice(afterDiscountTotalPrice);
+			order.setPointsGet(afterDiscountTotalPrice);
+
+			// 更改資料庫會員資訊的集點數
+			updateMemberPoint(order.getMemberAccount(), order.getPointsGet(), order.getPointsCost());
+		}
+
+		// 更改資料庫菜單的銷售量
+		updateMenu(order.getOrderInfo());
+
+		// 更改訂單狀態
+		order.setOrderState("checked");
+		ordersDao.save(order);
+
+		return new CheckOrderRes(order, RtnCode.SUCCESS.getMessage());
+	}
+
+	private int getTotalPriceAfterDiscount(int orderPointsCost, int beforDiscountTotalPrice) {
+		Points point = pointDao.findByPointsCost(orderPointsCost);
+
+		int discountFromDB = point.getDiscount();
+
+		// 若折扣數小於等於零，回傳原本的價格
+		if (discountFromDB <= 0) {
+			return beforDiscountTotalPrice;
+		}
+
+		int afterDiscountTotalPrice = 0;
+
+		if (discountFromDB > 10) {
+			afterDiscountTotalPrice = beforDiscountTotalPrice * discountFromDB / 100;
+		} else if (discountFromDB <= 10) {
+			afterDiscountTotalPrice = beforDiscountTotalPrice * discountFromDB / 10;
+		}
+
+		return afterDiscountTotalPrice;
+	}
+
+	private void updateMemberPoint(String memberAccount, int orderPointGet, int orderPointCost) {
+		Members member = membersDao.findByMemberAccount(memberAccount);
+		member.setPoints(member.getPoints() + orderPointGet - orderPointCost);
+		membersDao.save(member);
+	}
+
+	private void updateMenu(String orderInfo) {
+		Map<String, Integer> orderInfoFromDB = new HashMap<>();
+		List<String> allOrderCommodityName = new ArrayList<>();
+		String[] removeComma = orderInfo.split(",");
+		String resOrderInfo = "";
+
+		for (String item : removeComma) {
+			// 去除空白
+			String itemRemoveSpace = item.trim();
+
+			// 以等號分隔前後字串
+			String[] itemSplitByEqualSymbol = itemRemoveSpace.split("=");
+
+			// 將餐點名稱及餐點數量放入Map中
+			String itemCommodityName = itemSplitByEqualSymbol[0];
+			Integer itemCommodityQuantity = Integer.valueOf(itemSplitByEqualSymbol[1]);
+			orderInfoFromDB.put(itemCommodityName, itemCommodityQuantity);
+
+			// 將餐點名稱放入List
+			allOrderCommodityName.add(itemCommodityName);
+		}
+
+		// 更改銷售量
+		List<Menu> menusFromDB = menuDao.findByCommodityNameIn(allOrderCommodityName);
+		for (Menu menu : menusFromDB) {
+			menu.setSalesVolume(menu.getSalesVolume() + orderInfoFromDB.get(menu.getCommodityName()));
+		}
+
+		menuDao.saveAll(menusFromDB);
 	}
 
 }

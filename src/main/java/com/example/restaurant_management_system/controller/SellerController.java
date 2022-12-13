@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.restaurant_management_system.constants.RtnCode;
 import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.service.ifs.SellerService;
+import com.example.restaurant_management_system.vo.CheckOrderReq;
+import com.example.restaurant_management_system.vo.CheckOrderRes;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
 import com.example.restaurant_management_system.vo.ReadCommodtityRes;
@@ -98,5 +100,11 @@ public class SellerController {
 	@PostMapping(value = "/delete_points_exchange")
 	public SellerRes deletePointsExchange(@RequestBody SellerReq req) {
 		return sellerService.deletePointsExchange(req);
+	}
+
+	// 確認訂單
+	@PostMapping(value = "/check_order")
+	public CheckOrderRes checkOrder(@RequestBody CheckOrderReq req) {
+		return sellerService.checkOrder(req);
 	}
 }

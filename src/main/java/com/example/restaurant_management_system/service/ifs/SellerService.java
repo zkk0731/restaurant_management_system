@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.restaurant_management_system.entity.Points;
+import com.example.restaurant_management_system.vo.CheckOrderReq;
+import com.example.restaurant_management_system.vo.CheckOrderRes;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
 import com.example.restaurant_management_system.vo.ReadCommodtityRes;
@@ -38,4 +40,7 @@ public interface SellerService {
 
 	// 刪除點數兌換
 	public SellerRes deletePointsExchange(SellerReq req);
+
+	// 確認訂單
+	public CheckOrderRes checkOrder(CheckOrderReq req);
 }
