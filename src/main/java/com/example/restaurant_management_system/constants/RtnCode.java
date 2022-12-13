@@ -14,7 +14,10 @@ public enum RtnCode {
 	ALREADY_LOGIN("403","已有帳號登入，要登入其他帳號請先登出"),
 	NOT_LOGIN("400","尚未登入"),
 	SHOPPING_CART_IS_EMPTY("403", "購物車為空"),
-	NO_ORDERS_RECORD("200", "尚無購買紀錄");
+	NO_ORDERS_RECORD("200", "尚無購買紀錄"),
+	ORDER_NOT_EXIST("403", "訂單不存在"),
+	ORDER_HAS_CANCELED("403", "訂單已是取消狀態"),
+	COMMODITY_EXIST("403", "餐點已存在");
 	
 	
 	private String code;

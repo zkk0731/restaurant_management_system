@@ -3,10 +3,10 @@ package com.example.restaurant_management_system.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProcessOrderReq {
-	
+
 	@JsonProperty("member_account")
 	private String memberAccount;
-	
+
 	@JsonProperty("order_id")
 	private int orderId;
 
@@ -16,6 +16,10 @@ public class ProcessOrderReq {
 
 	public ProcessOrderReq(String memberAccount) {
 		this.memberAccount = memberAccount;
+	}
+
+	public ProcessOrderReq(int orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getMemberAccount() {
@@ -34,5 +38,4 @@ public class ProcessOrderReq {
 		this.orderId = orderId;
 	}
 
-	
 }

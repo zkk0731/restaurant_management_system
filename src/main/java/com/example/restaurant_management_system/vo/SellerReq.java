@@ -39,6 +39,12 @@ public class SellerReq {
 
 	}
 
+	public SellerReq(String commodityName, int price, String category) {
+		this.commodityName = commodityName;
+		this.price = price;
+		this.category = category;
+	}
+	
 	public LocalDateTime getStartDateTime() {
 		return startDateTime;
 	}

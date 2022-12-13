@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -17,14 +18,19 @@ import org.springframework.util.StringUtils;
 
 import com.example.restaurant_management_system.constants.RtnCode;
 import com.example.restaurant_management_system.entity.Members;
+import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.entity.Orders;
 import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.repository.MembersDao;
+import com.example.restaurant_management_system.repository.MenuDao;
 import com.example.restaurant_management_system.repository.OrdersDao;
 import com.example.restaurant_management_system.repository.PointsDao;
 import com.example.restaurant_management_system.service.ifs.SellerService;
+import com.example.restaurant_management_system.vo.CheckOrderReq;
+import com.example.restaurant_management_system.vo.CheckOrderRes;
 import com.example.restaurant_management_system.vo.ProcessOrderReq;
 import com.example.restaurant_management_system.vo.ProcessOrderRes;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
@@ -36,13 +42,16 @@ public class SellerServiceImpl implements SellerService {
 
 	@Autowired
 	private PointsDao pointDao;
-	
+
 	@Autowired
 	private MembersDao membersDao;
-	
+
 	@Autowired
 	private JavaMailSender mailSender;
-	
+
+	@Autowired
+	private MenuDao menuDao;
+
 	// 訂單資訊字串轉Map型態
 	public Map<String, Integer> orderInfoStrToMap(Orders orders) {
 		String orderInfoStr = orders.getOrderInfo();
@@ -124,7 +133,7 @@ public class SellerServiceImpl implements SellerService {
 		List<Points> pointsList = pointDao.findAll();
 		return pointsList;
 	}
-	
+
 	// 未確認訂單查詢
 	@Override
 	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req) {
@@ -160,38 +169,231 @@ public class SellerServiceImpl implements SellerService {
 		return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
 	}
 
-	//推播功能
+	// 推播功能
 	@Override
 	public SellerRes sendMessage(SellerReq req) {
-		
-		 SimpleMailMessage message = new SimpleMailMessage();
-		 List<Members> members = membersDao.findAll();
-		 
-		 if(members == null) {
-			 return new SellerRes("無會員資訊");
-		 }
-		 
-		 List<String> emailList = new ArrayList<>();
-		 for(Members item : members) {
-			 if(StringUtils.hasText(item.getEmail())) {
-				 emailList.add(item.getEmail());
-			 }
-		 }
-		 
-		 if(CollectionUtils.isEmpty(emailList)) {
-			 return new SellerRes("無email資訊");
-		 }
-		 
-		 String[] emailArr = emailList.toArray(new String[0]);
-		 
-		 message.setFrom("arashi11031228@gmail.com");
-		 message.setTo(emailArr);
-		 message.setSubject(req.getEmailTitle());
-		 message.setText(req.getEmailMessage());
-		 
-		 mailSender.send(message);
-		 
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		List<Members> members = membersDao.findAll();
+
+		if (members == null) {
+			return new SellerRes("無會員資訊");
+		}
+
+		List<String> emailList = new ArrayList<>();
+		for (Members item : members) {
+			if (StringUtils.hasText(item.getEmail())) {
+				emailList.add(item.getEmail());
+			}
+		}
+
+		if (CollectionUtils.isEmpty(emailList)) {
+			return new SellerRes("無email資訊");
+		}
+
+		String[] emailArr = emailList.toArray(new String[0]);
+
+		message.setFrom("arashi11031228@gmail.com");
+		message.setTo(emailArr);
+		message.setSubject(req.getEmailTitle());
+		message.setText(req.getEmailMessage());
+
+		mailSender.send(message);
+
 		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 取消訂單
+	@Override
+	public ProcessOrderRes cancelOrder(ProcessOrderReq req) {
+
+		// 從取出資料庫中取出訂單資料
+		Orders order = ordersDao.findByOrderId(req.getOrderId());
+
+		// 判別使用者輸入的訂單 1. 訂單流水好是否為空 2. 訂單是否存在於資料庫 3. 訂單狀態是否為canceled
+		if (req.getOrderId() == 0) {
+			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+		} else if (order == null) {
+			return new ProcessOrderRes(RtnCode.ORDER_NOT_EXIST.getMessage());
+		} else if (order.getOrderState().equalsIgnoreCase("canceled")) {
+			return new ProcessOrderRes(RtnCode.ORDER_HAS_CANCELED.getMessage());
+		}
+
+		// 將訂單狀態更動為 canceled
+		order.setOrderState("canceled");
+		ordersDao.save(order);
+
+		// 設定res
+		List<Orders> orderInfo = new ArrayList<>();
+		orderInfo.add(order);
+
+		return new ProcessOrderRes(orderInfo, RtnCode.SUCCESS.getMessage());
+	}
+
+	// 建立餐點品項
+	@Override
+	public SellerRes createCommodity(SellerReq req) {
+		// 判別使用者輸入內容 1. 價格不得小於零 2. 品項名稱不得為空 3. 品項分類不得為空 4. 品項名稱不重複
+		if (req.getPrice() <= 0 || !StringUtils.hasText(req.getCommodityName())
+				|| !StringUtils.hasText(req.getCategory())) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		Optional<Menu> menuFromDB = menuDao.findById(req.getCommodityName());
+		if (!menuFromDB.isEmpty()) {
+			return new SellerRes(RtnCode.COMMODITY_EXIST.getMessage());
+		}
+
+		// 回傳餐點資訊
+		Menu menu = new Menu(req.getCommodityName(), req.getPrice(), req.getCategory());
+		menuDao.save(menu);
+
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 顯示餐點品項
+	@Override
+	public ReadCommodtityRes readCommodtity(SellerReq req) {
+		// 判別使用者輸入內容，輸入之餐點分類不得為空
+		if (!StringUtils.hasText(req.getCategory())) {
+			return new ReadCommodtityRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		// 從資料庫取出特定類別的所有餐點
+		List<Menu> getMenusByCategory = menuDao.findByCategory(req.getCategory());
+		return new ReadCommodtityRes(getMenusByCategory, RtnCode.SUCCESS.getMessage());
+	}
+
+	// 更新點數兌換
+	@Override
+	public SellerRes updatePointsExchange(SellerReq req) {
+		Points points = pointDao.findByPointName(req.getPointName());
+
+		if (!StringUtils.hasText(req.getPointName()) || req.getDiscount() <= 0 || req.getPointsCost() <= 0) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		if (points == null) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		points.setDiscount(req.getDiscount());
+		points.setPointsCost(req.getPointsCost());
+		pointDao.save(points);
+
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 刪除點數兌換
+	@Override
+	public SellerRes deletePointsExchange(SellerReq req) {
+		Points points = pointDao.findByPointName(req.getPointName());
+
+		if (!StringUtils.hasText(req.getPointName())) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		if (points == null) {
+			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+
+		pointDao.delete(points);
+
+		return new SellerRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	// 確認訂單
+	@Override
+	public CheckOrderRes checkOrder(CheckOrderReq req) {
+		// 從資料庫取出訂單資訊
+		Optional<Orders> getOrderFromDB = ordersDao.findById(req.getOrderId());
+
+		// 若輸入的訂單不在資料庫內回傳錯誤訊息
+		if (getOrderFromDB.isEmpty()) {
+			return new CheckOrderRes(RtnCode.ORDER_NOT_EXIST.getMessage());
+		}
+
+		Orders order = getOrderFromDB.get();
+
+		// 判別此訂單是否是會員訂單
+		if (StringUtils.hasText(order.getMemberAccount())) {
+			// 得到折扣後價格
+			int afterDiscountTotalPrice = getTotalPriceAfterDiscount(order.getPointsCost(), order.getTotalPrice());
+
+			// 更改 order 的總價格及得到的點數
+			order.setTotalPrice(afterDiscountTotalPrice);
+			order.setPointsGet(afterDiscountTotalPrice);
+
+			// 更改資料庫會員資訊的集點數
+			updateMemberPoint(order.getMemberAccount(), order.getPointsGet(), order.getPointsCost());
+		}
+
+		// 更改資料庫菜單的銷售量
+		updateMenu(order.getOrderInfo());
+
+		// 更改訂單狀態
+		order.setOrderState("checked");
+		ordersDao.save(order);
+
+		return new CheckOrderRes(order, RtnCode.SUCCESS.getMessage());
+	}
+
+	private int getTotalPriceAfterDiscount(int orderPointsCost, int beforDiscountTotalPrice) {
+		Points point = pointDao.findByPointsCost(orderPointsCost);
+
+		int discountFromDB = point.getDiscount();
+
+		// 若折扣數小於等於零，回傳原本的價格
+		if (discountFromDB <= 0) {
+			return beforDiscountTotalPrice;
+		}
+
+		int afterDiscountTotalPrice = 0;
+
+		if (discountFromDB > 10) {
+			afterDiscountTotalPrice = beforDiscountTotalPrice * discountFromDB / 100;
+		} else if (discountFromDB <= 10) {
+			afterDiscountTotalPrice = beforDiscountTotalPrice * discountFromDB / 10;
+		}
+
+		return afterDiscountTotalPrice;
+	}
+
+	private void updateMemberPoint(String memberAccount, int orderPointGet, int orderPointCost) {
+		Members member = membersDao.findByMemberAccount(memberAccount);
+		member.setPoints(member.getPoints() + orderPointGet - orderPointCost);
+		membersDao.save(member);
+	}
+
+	private void updateMenu(String orderInfo) {
+		Map<String, Integer> orderInfoFromDB = new HashMap<>();
+		List<String> allOrderCommodityName = new ArrayList<>();
+		String[] removeComma = orderInfo.split(",");
+		String resOrderInfo = "";
+
+		for (String item : removeComma) {
+			// 去除空白
+			String itemRemoveSpace = item.trim();
+
+			// 以等號分隔前後字串
+			String[] itemSplitByEqualSymbol = itemRemoveSpace.split("=");
+
+			// 將餐點名稱及餐點數量放入Map中
+			String itemCommodityName = itemSplitByEqualSymbol[0];
+			Integer itemCommodityQuantity = Integer.valueOf(itemSplitByEqualSymbol[1]);
+			orderInfoFromDB.put(itemCommodityName, itemCommodityQuantity);
+
+			// 將餐點名稱放入List
+			allOrderCommodityName.add(itemCommodityName);
+		}
+
+		// 更改銷售量
+		List<Menu> menusFromDB = menuDao.findByCommodityNameIn(allOrderCommodityName);
+		for (Menu menu : menusFromDB) {
+			menu.setSalesVolume(menu.getSalesVolume() + orderInfoFromDB.get(menu.getCommodityName()));
+		}
+
+		menuDao.saveAll(menusFromDB);
 	}
 
 }

@@ -9,4 +9,6 @@ import com.example.restaurant_management_system.entity.Points;
 public interface PointsDao extends JpaRepository<Points, Integer> {
 
 	public Points findByPointName(String pointName);
+
+	public Points findByPointsCost(int pointCost);
 }

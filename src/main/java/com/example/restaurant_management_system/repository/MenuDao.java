@@ -16,4 +16,6 @@ public interface MenuDao extends JpaRepository<Menu, String> {
 	// 透過餐點分類查詢
 	public List<Menu> findByCategory(String category);
 
+	// 透過餐點List查詢所有餐點
+	public List<Menu> findByCommodityNameIn(List<String> ordersCommodityName);
 }
