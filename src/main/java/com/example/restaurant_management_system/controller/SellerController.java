@@ -121,5 +121,18 @@ public class SellerController {
 		
 		return sellerService.sendMessage(req);	
 	}
+	
+	//確認店家登入狀態
+	@PostMapping(value = "/check_seller_login")
+	public SellerRes checkSellerLoginApi(HttpSession session) {
+		SellerRes checkLogin = checkSellerLogin(session);
+		
+		//判斷店家是否登入
+		if(checkLogin != null) {
+			return checkLogin;
+		}
+		
+		return new SellerRes("管理員: " + session.getAttribute("sellerAccount").toString());
+	}
 
 }
