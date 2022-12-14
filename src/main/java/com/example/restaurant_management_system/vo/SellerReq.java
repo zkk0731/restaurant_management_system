@@ -24,11 +24,11 @@ public class SellerReq {
 	private int pointsCost;
 
 	@JsonProperty("start_date_time")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime startDateTime;
 
 	@JsonProperty("end_date_time")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime endDateTime;
 	
 	private String emailMessage;
