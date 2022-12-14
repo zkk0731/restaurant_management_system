@@ -28,10 +28,12 @@ public class CustomerRes {
 	private LocalDateTime orderDateTime;
 
 	private Set<Menu> menuSet;
-	
+
 	private Members member;
-	
+
 	private List<Orders> orders;
+
+	private MemberInfo memberInfo;
 
 	public CustomerRes() {
 
@@ -121,4 +123,12 @@ public class CustomerRes {
 		this.orders = orders;
 	}
 
+	public MemberInfo getMemberInfo() {
+		return memberInfo;
+	}
+
+	public void setMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
+	}
+	
 }

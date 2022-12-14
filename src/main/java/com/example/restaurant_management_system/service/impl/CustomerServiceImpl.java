@@ -22,6 +22,8 @@ import com.example.restaurant_management_system.repository.OrdersDao;
 import com.example.restaurant_management_system.service.ifs.CustomerService;
 import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
+import com.example.restaurant_management_system.vo.MemberInfo;
+
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -203,11 +205,12 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerRes searchMemberInfo(String account) {
 		CustomerRes res = new CustomerRes();
-		
 		Members member = membersDao.findByMemberAccount(account);
-		List<Orders> orders = ordersDao.findByMemberAccount(account);
+		MemberInfo memberInfo = new MemberInfo(member.getMemberId(), member.getMemberAccount(), member.getMemberName(), member.getPhone(), member.getAgeRange(),
+				member.getLineId(), member.getEmail(), member.getPoints());
 		
-		res.setMember(member);
+		List<Orders> orders = ordersDao.findByMemberAccount(account);
+		res.setMemberInfo(memberInfo);
 		
 		//判斷會員是否有消費紀錄
 		if(orders == null) {
