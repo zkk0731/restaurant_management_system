@@ -22,7 +22,7 @@ import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 import com.example.restaurant_management_system.vo.SellerReq;
 import com.example.restaurant_management_system.vo.SellerRes;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 public class SellerController {
 

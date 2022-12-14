@@ -20,7 +20,7 @@ import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
 import com.example.restaurant_management_system.vo.ShoppingCart;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 public class CustomerController {
 
