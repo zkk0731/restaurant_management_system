@@ -112,12 +112,33 @@ public class SellerServiceImpl implements SellerService {
 	public SellerRes createPointsExchange(SellerReq req) {
 		SellerRes res = new SellerRes();
 		Points points = pointDao.findByPointName(req.getPointName());
+		Points pointsByPointsCost = pointDao.findByPointsCost(req.getPointsCost());
 
+		// 點數兌換名稱是否存在
+		if (!StringUtils.hasText(req.getPointName())) {
+			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		
+		// 扣除所需點數不得為小於等於零
+		if (req.getPointsCost() <= 0) {
+			return new SellerRes(RtnCode.POINTCOST_ERROR.getMessage());
+		}
+		
+		// 折扣範圍0~99(0為兌換物品，其他數字為折扣數)
+		if (req.getDiscount() < 0 || req.getDiscount() > 99) {
+			return new SellerRes(RtnCode.DISCOUNT_ERROR.getMessage());
+		}
+		
 		// 點數兌換名稱不可重複
 		if (points != null) {
-			res.setMessage(RtnCode.POINTNAME_EXIST.getMessage());
-			return res;
+			return new SellerRes(RtnCode.POINTNAME_EXIST.getMessage());
 		}
+		
+		// 扣除所需點數不可重複
+		if (pointsByPointsCost != null) {
+			return new SellerRes(RtnCode.POINTCOST_EXIST.getMessage());
+		}
+		
 		points = new Points(req.getPointName(), req.getDiscount(), req.getPointsCost());
 		pointDao.save(points);
 

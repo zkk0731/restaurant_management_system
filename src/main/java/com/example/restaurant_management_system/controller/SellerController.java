@@ -67,22 +67,11 @@ public class SellerController {
 	// 創建點數兌換
 	@PostMapping(value = "/createPointsExchange")
 	public SellerRes createPointsExchange(@RequestBody SellerReq req, HttpSession session) {
-
 		SellerRes checkLogin = checkSellerLogin(session);
-
+		
 		// 判斷店家是否登入
 		if (checkLogin != null) {
 			return checkLogin;
-		}
-
-		// 點數兌換名稱是否存在
-		if (!StringUtils.hasText(req.getPointName())) {
-			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
-		}
-
-		// 折扣範圍1折~99折
-		if (req.getDiscount() < 1 || req.getDiscount() > 99) {
-			return new SellerRes(RtnCode.DISCOUNT_ERROR.getMessage());
 		}
 
 		return sellerService.createPointsExchange(req);

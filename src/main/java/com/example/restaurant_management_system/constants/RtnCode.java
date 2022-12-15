@@ -7,6 +7,8 @@ public enum RtnCode {
 	PARAMETER_REQUIRED("403", "所需資料缺失"),
 	CATEGORY_ISNOT_EXIST("403", "分類不存在"),
 	POINTNAME_EXIST("403", "名稱已存在"),
+	POINTCOST_EXIST("403", "扣除所需點數已存在"),
+	POINTCOST_ERROR("403", "扣除所需點數輸入錯誤"),
 	DISCOUNT_ERROR("403", "折扣輸入錯誤"),
 	ACCOUNT_OR_PWD_ERROR("403", "帳號或密碼錯誤"),
 	LOGIN_MEMBER_SUCCESSFUL("200","登入會員成功"),
