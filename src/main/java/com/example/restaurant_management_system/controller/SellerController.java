@@ -68,7 +68,7 @@ public class SellerController {
 	@PostMapping(value = "/createPointsExchange")
 	public SellerRes createPointsExchange(@RequestBody SellerReq req, HttpSession session) {
 		SellerRes checkLogin = checkSellerLogin(session);
-		
+
 		// 判斷店家是否登入
 		if (checkLogin != null) {
 			return checkLogin;

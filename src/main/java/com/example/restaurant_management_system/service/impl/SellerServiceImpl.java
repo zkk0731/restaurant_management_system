@@ -118,27 +118,27 @@ public class SellerServiceImpl implements SellerService {
 		if (!StringUtils.hasText(req.getPointName())) {
 			return new SellerRes(RtnCode.PARAMETER_REQUIRED.getMessage());
 		}
-		
+
 		// 扣除所需點數不得為小於等於零
 		if (req.getPointsCost() <= 0) {
 			return new SellerRes(RtnCode.POINTCOST_ERROR.getMessage());
 		}
-		
+
 		// 折扣範圍0~99(0為兌換物品，其他數字為折扣數)
 		if (req.getDiscount() < 0 || req.getDiscount() > 99) {
 			return new SellerRes(RtnCode.DISCOUNT_ERROR.getMessage());
 		}
-		
+
 		// 點數兌換名稱不可重複
 		if (points != null) {
 			return new SellerRes(RtnCode.POINTNAME_EXIST.getMessage());
 		}
-		
+
 		// 扣除所需點數不可重複
 		if (pointsByPointsCost != null) {
 			return new SellerRes(RtnCode.POINTCOST_EXIST.getMessage());
 		}
-		
+
 		points = new Points(req.getPointName(), req.getDiscount(), req.getPointsCost());
 		pointDao.save(points);
 
@@ -158,36 +158,10 @@ public class SellerServiceImpl implements SellerService {
 	// 未確認訂單查詢
 	@Override
 	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req) {
-		// 取出資料庫中會員資料
-		Members getMemberAccount = membersDao.findByMemberAccount(req.getMemberAccount());
-
-		// 判別使用者輸入的帳號是否存在
-		if (getMemberAccount == null) {
-			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
-		}
-
 		// 取出資料庫中所有未確認的訂單資料
 		List<Orders> uncheckedOrders = ordersDao.findByOrderState("unchecked");
 
-		// 判別使用者權限
-		if (!getMemberAccount.isAuthority()) {
-			// If條件判別權限為會員
-			List<Orders> memberUncheckOrders = new ArrayList<Orders>();
-
-			// 從uncheckedOrders取出特定會員所有未確認的訂單資料
-			for (Orders item : uncheckedOrders) {
-				if (item.getMemberAccount().equalsIgnoreCase(req.getMemberAccount())) {
-					memberUncheckOrders.add(item);
-				}
-			}
-			return new ProcessOrderRes(memberUncheckOrders, RtnCode.SUCCESS.getMessage());
-
-		} else if (getMemberAccount.isAuthority()) {
-			// If條件判別權限為店家，設定回傳資料
-			return new ProcessOrderRes(uncheckedOrders, RtnCode.SUCCESS.getMessage());
-		}
-
-		return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
+		return new ProcessOrderRes(uncheckedOrders, RtnCode.SUCCESS.getMessage());
 	}
 
 	// 推播功能
@@ -231,7 +205,7 @@ public class SellerServiceImpl implements SellerService {
 		// 從取出資料庫中取出訂單資料
 		Orders order = ordersDao.findByOrderId(req.getOrderId());
 
-		// 判別使用者輸入的訂單 1. 訂單流水好是否為空 2. 訂單是否存在於資料庫 3. 訂單狀態是否為canceled
+		// 判別使用者輸入的訂單 1. 訂單流水號是否為空 2. 訂單是否存在於資料庫 3. 訂單狀態是否為canceled
 		if (req.getOrderId() == 0) {
 			return new ProcessOrderRes(RtnCode.PARAMETER_ERROR.getMessage());
 		} else if (order == null) {
