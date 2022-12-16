@@ -18,6 +18,9 @@ public class SellerReq {
 	@JsonProperty("point_name")
 	private String pointName;
 
+	@JsonProperty("new_point_name")
+	private String newPointName;
+	
 	private int discount;
 
 	@JsonProperty("points_cost")
@@ -137,6 +140,14 @@ public class SellerReq {
 
 	public void setEmailTitle(String emailTitle) {
 		this.emailTitle = emailTitle;
+	}
+
+	public String getNewPointName() {
+		return newPointName;
+	}
+
+	public void setNewPointName(String newPointName) {
+		this.newPointName = newPointName;
 	}
 
 }
