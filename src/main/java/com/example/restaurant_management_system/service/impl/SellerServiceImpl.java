@@ -265,7 +265,7 @@ public class SellerServiceImpl implements SellerService {
 	public SellerRes updatePointsExchange(SellerReq req) {
 		Points points = pointDao.findByPointName(req.getPointName());
 
-		if (!StringUtils.hasText(req.getPointName()) || req.getDiscount() <= 0 || req.getPointsCost() <= 0) {
+		if (!StringUtils.hasText(req.getPointName()) || req.getDiscount() < 0 || req.getPointsCost() <= 0) {
 			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
 
