@@ -272,7 +272,7 @@ public class SellerServiceImpl implements SellerService {
 		if (points == null) {
 			return new SellerRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
-
+		points.setPointName(req.getNewPointName());
 		points.setDiscount(req.getDiscount());
 		points.setPointsCost(req.getPointsCost());
 		pointDao.save(points);
