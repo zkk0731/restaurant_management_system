@@ -23,6 +23,7 @@ import com.example.restaurant_management_system.service.ifs.CustomerService;
 import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
 import com.example.restaurant_management_system.vo.MemberInfo;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 
 
 @Service
@@ -43,6 +44,14 @@ public class CustomerServiceImpl implements CustomerService {
 		List<Menu> commodityLeaderBoard = new ArrayList<>();
 		commodityLeaderBoard = menuDao.findTop5ByOrderBySalesVolumeDesc();
 		return commodityLeaderBoard;
+	}
+	
+	// 查詢餐點排行榜(Yu)
+	@Override
+	public ReadCommodtityRes searchTop5Commodity2() {
+		List<Menu> commodityLeaderBoard = new ArrayList<>();
+		commodityLeaderBoard = menuDao.findTop5ByOrderBySalesVolumeDesc();
+		return new ReadCommodtityRes(commodityLeaderBoard, RtnCode.SUCCESS.getMessage());
 	}
 
 	// 點餐

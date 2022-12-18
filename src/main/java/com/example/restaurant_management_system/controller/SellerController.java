@@ -137,10 +137,16 @@ public class SellerController {
 		return sellerService.createCommodity(req);
 	}
 
-	// 顯示餐點品項
+	// 顯示餐點品項(輸入餐點分類)
 	@PostMapping(value = "/read_commodtity")
 	public ReadCommodtityRes readCommodtity(@RequestBody SellerReq req) {
 		return sellerService.readCommodtity(req);
+	}
+	
+	// 顯示所有餐點品項
+	@PostMapping(value = "/read_all_commodtity")
+	public ReadCommodtityRes readAllCommodtity() {
+		return sellerService.readAllCommodtity();
 	}
 
 	// 更新點數兌換

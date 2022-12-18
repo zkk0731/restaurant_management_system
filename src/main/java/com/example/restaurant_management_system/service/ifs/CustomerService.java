@@ -7,11 +7,15 @@ import com.example.restaurant_management_system.entity.Members;
 import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 
 public interface CustomerService {
 
 	// 查詢熱門餐點排行前五
 	public List<Menu> searchTop5Commodity();
+	
+	// 查詢熱門餐點排行前五(Yu)
+	public ReadCommodtityRes searchTop5Commodity2(); 
 
 	// 點餐
 	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice, int pointsCost);

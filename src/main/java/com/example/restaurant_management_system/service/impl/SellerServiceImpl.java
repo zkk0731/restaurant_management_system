@@ -247,7 +247,7 @@ public class SellerServiceImpl implements SellerService {
 		return new SellerRes(RtnCode.SUCCESS.getMessage());
 	}
 
-	// 顯示餐點品項
+	// 顯示餐點品項(輸入餐點分類)
 	@Override
 	public ReadCommodtityRes readCommodtity(SellerReq req) {
 		// 判別使用者輸入內容，輸入之餐點分類不得為空
@@ -257,7 +257,24 @@ public class SellerServiceImpl implements SellerService {
 
 		// 從資料庫取出特定類別的所有餐點
 		List<Menu> getMenusByCategory = menuDao.findByCategory(req.getCategory());
+		
+		// 判別使用者輸入內容，輸入之餐點分類需存在於資料庫中
+		if (getMenusByCategory.isEmpty() || getMenusByCategory == null) {
+			return new ReadCommodtityRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}		
+
 		return new ReadCommodtityRes(getMenusByCategory, RtnCode.SUCCESS.getMessage());
+	}
+	
+	// 顯示所有餐點品項
+	@Override
+	public ReadCommodtityRes readAllCommodtity() {
+		List<Menu> getAllMenus = menuDao.findAll();
+		if (getAllMenus.isEmpty() || getAllMenus == null) {
+			return new ReadCommodtityRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		return new ReadCommodtityRes(getAllMenus, RtnCode.SUCCESS.getMessage());
 	}
 
 	// 更新點數兌換

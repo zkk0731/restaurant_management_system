@@ -18,6 +18,7 @@ import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.service.ifs.CustomerService;
 import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
+import com.example.restaurant_management_system.vo.ReadCommodtityRes;
 import com.example.restaurant_management_system.vo.ShoppingCart;
 
 //@CrossOrigin
@@ -31,6 +32,12 @@ public class CustomerController {
 	@PostMapping(value = "/searchTop5Commodity")
 	public List<Menu> searchTop5Commodity() {
 		return customerService.searchTop5Commodity();
+	}
+	
+	// 查詢餐點排行榜(Yu)
+	@PostMapping(value = "/searchTop5Commodity2")
+	public ReadCommodtityRes searchTop5Commodity2() {
+		return customerService.searchTop5Commodity2();
 	}
 
 	// 點餐
@@ -58,7 +65,9 @@ public class CustomerController {
 			return new CustomerRes(RtnCode.CATEGORY_ISNOT_EXIST.getMessage());
 		}
 
-		return customerService.searchCategory(req.getCategory());
+		CustomerRes res = customerService.searchCategory(req.getCategory());
+		res.setMessage(RtnCode.SUCCESS.getMessage());
+		return res;
 	}
 
 	// 創建會員

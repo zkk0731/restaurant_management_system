@@ -31,6 +31,13 @@ public class Menu {
 		this.price = price;
 		this.category = category;
 	}
+	
+	public Menu(String commodityName, int price, String category, int salesVolume) {
+		this.commodityName = commodityName;
+		this.price = price;
+		this.category = category;
+		this.salesVolume = salesVolume;
+	}
 
 	public String getCommodityName() {
 		return commodityName;
