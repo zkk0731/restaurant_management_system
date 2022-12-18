@@ -314,14 +314,17 @@ public class SellerServiceImpl implements SellerService {
 		// 判別此訂單是否是會員訂單
 		if (StringUtils.hasText(order.getMemberAccount())) {
 			// 得到折扣後價格
+			
 			int afterDiscountTotalPrice = getTotalPriceAfterDiscount(order.getPointsCost(), order.getTotalPrice());
 
 			// 更改 order 的總價格及得到的點數
 			order.setTotalPrice(afterDiscountTotalPrice);
 			order.setPointsGet(afterDiscountTotalPrice);
-
+			
+			
 			// 更改資料庫會員資訊的集點數
 			updateMemberPoint(order.getMemberAccount(), order.getPointsGet(), order.getPointsCost());
+			
 		}
 
 		// 更改資料庫菜單的銷售量
@@ -337,6 +340,9 @@ public class SellerServiceImpl implements SellerService {
 	private int getTotalPriceAfterDiscount(int orderPointsCost, int beforDiscountTotalPrice) {
 		Points point = pointDao.findByPointsCost(orderPointsCost);
 
+		if(point == null) {
+			return beforDiscountTotalPrice;
+		}
 		int discountFromDB = point.getDiscount();
 
 		// 若折扣數小於等於零，回傳原本的價格
