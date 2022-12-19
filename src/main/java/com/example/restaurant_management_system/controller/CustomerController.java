@@ -225,4 +225,19 @@ public class CustomerController {
 		
 		return customerService.searchMemberInfo(session.getAttribute("account").toString());
 	}
+	
+	//顯示購物車
+	@PostMapping(value = "/show_shopping_cart")
+	public CustomerRes showShoppingCart( HttpSession session) {
+		CustomerRes res = new CustomerRes();
+		if(session.getAttribute("shoppingCart") == null) {
+			res.setMessage(RtnCode.SHOPPING_CART_IS_EMPTY.getMessage());
+		}
+			
+		ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCart");
+		res.setOrderInfoMap(shoppingCart.getOrderInfoMap());
+		res.setTotalPrice(shoppingCart.getTotalPrice());
+		res.setMessage(RtnCode.SUCCESS.getMessage());
+		return res;
+	}
 }
