@@ -174,7 +174,7 @@ public class SellerController {
 		return sellerService.checkOrder(req);
 	}
 	
-	@PostMapping(value="upload", produces = MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value="/upload", produces = MediaType.TEXT_PLAIN_VALUE)
 	  public String upload(@RequestParam("file") MultipartFile file) throws IOException {
 	    if (!file.getOriginalFilename().isEmpty()) {
 	      BufferedOutputStream outputStream = new BufferedOutputStream(
