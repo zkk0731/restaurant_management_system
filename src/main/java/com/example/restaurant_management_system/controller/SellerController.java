@@ -1,15 +1,22 @@
 package com.example.restaurant_management_system.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.restaurant_management_system.constants.RtnCode;
 import com.example.restaurant_management_system.entity.Points;
@@ -166,4 +173,20 @@ public class SellerController {
 	public CheckOrderRes checkOrder(@RequestBody CheckOrderReq req) {
 		return sellerService.checkOrder(req);
 	}
+	
+	@PostMapping(value="upload", produces = MediaType.TEXT_PLAIN_VALUE)
+	  public String upload(@RequestParam("file") MultipartFile file) throws IOException {
+	    if (!file.getOriginalFilename().isEmpty()) {
+	      BufferedOutputStream outputStream = new BufferedOutputStream(
+	            new FileOutputStream(
+	                  new File("", file.getOriginalFilename()))); // 上傳檔案位置為D:\
+	      outputStream.write(file.getBytes());
+	      outputStream.flush();
+	      outputStream.close();
+	    }else{
+	      return "fail";
+	    }
+	    
+	    return "success";
+	  }
 }
