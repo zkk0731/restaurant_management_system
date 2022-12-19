@@ -37,6 +37,9 @@ public interface SellerService {
 
 	// 顯示餐點品項
 	public ReadCommodtityRes readCommodtity(SellerReq req);
+	
+	// 顯示所有餐點品項
+	public ReadCommodtityRes readAllCommodtity();
 
 	// 更新點數兌換
 	public SellerRes updatePointsExchange(SellerReq req);
