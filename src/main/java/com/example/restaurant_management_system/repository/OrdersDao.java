@@ -16,6 +16,8 @@ public interface OrdersDao extends JpaRepository<Orders, Integer> {
 	public List<Orders> findByOrderState(String orderState);
 
 	public List<Orders> findByMemberAccount(String account);
+	
+	public List<Orders> findAllByOrderByOrderDatetimeDesc();
 
 	public Orders findByOrderId(int orderId);
 }

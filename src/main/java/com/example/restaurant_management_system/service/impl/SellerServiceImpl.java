@@ -159,9 +159,13 @@ public class SellerServiceImpl implements SellerService {
 	@Override
 	public ProcessOrderRes searchUncheckedOrder(ProcessOrderReq req) {
 		// 取出資料庫中所有未確認的訂單資料
-		List<Orders> uncheckedOrders = ordersDao.findByOrderState("unchecked");
-
-		return new ProcessOrderRes(uncheckedOrders, RtnCode.SUCCESS.getMessage());
+		List<Orders> orders = ordersDao.findAllByOrderByOrderDatetimeDesc();
+		
+		if(orders.isEmpty()) {
+			return new ProcessOrderRes(RtnCode.ORDER_NOT_EXIST.getMessage());
+		}
+		
+		return new ProcessOrderRes(orders, RtnCode.SUCCESS.getMessage());
 	}
 
 	// 推播功能

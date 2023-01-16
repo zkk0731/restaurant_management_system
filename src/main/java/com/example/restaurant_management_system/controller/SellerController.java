@@ -90,7 +90,7 @@ public class SellerController {
 		return sellerService.readPointsExchange();
 	}
 
-	// 未確認訂單查詢
+	// 未確認訂單查詢(顯示所有訂單 到前端再分類)
 	@PostMapping(value = "/search_unchecked_order")
 	public ProcessOrderRes searchUncheckedOrder(@RequestBody ProcessOrderReq req, HttpSession session) {
 
