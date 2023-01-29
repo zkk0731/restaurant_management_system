@@ -336,11 +336,11 @@ public class SellerServiceImpl implements SellerService {
 		if (StringUtils.hasText(order.getMemberAccount())) {
 			// 得到折扣後價格
 			
-			int afterDiscountTotalPrice = getTotalPriceAfterDiscount(order.getPointsCost(), order.getTotalPrice());
+//			int afterDiscountTotalPrice = getTotalPriceAfterDiscount(order.getPointsCost(), order.getTotalPrice());
 
 			// 更改 order 的總價格及得到的點數
-			order.setTotalPrice(afterDiscountTotalPrice);
-			order.setPointsGet(afterDiscountTotalPrice);
+//			order.setTotalPrice(afterDiscountTotalPrice);
+			order.setPointsGet(order.getPriceAfterDiscount());
 			
 			
 			// 更改資料庫會員資訊的集點數

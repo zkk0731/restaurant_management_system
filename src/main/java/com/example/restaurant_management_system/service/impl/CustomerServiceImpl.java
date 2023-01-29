@@ -16,9 +16,11 @@ import com.example.restaurant_management_system.constants.RtnCode;
 import com.example.restaurant_management_system.entity.Members;
 import com.example.restaurant_management_system.entity.Menu;
 import com.example.restaurant_management_system.entity.Orders;
+import com.example.restaurant_management_system.entity.Points;
 import com.example.restaurant_management_system.repository.MembersDao;
 import com.example.restaurant_management_system.repository.MenuDao;
 import com.example.restaurant_management_system.repository.OrdersDao;
+import com.example.restaurant_management_system.repository.PointsDao;
 import com.example.restaurant_management_system.service.ifs.CustomerService;
 import com.example.restaurant_management_system.vo.CustomerReq;
 import com.example.restaurant_management_system.vo.CustomerRes;
@@ -37,6 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private MembersDao membersDao;
+	
+	@Autowired
+	private PointsDao pointsDao;
 
 	// 查詢餐點排行榜
 	@Override
@@ -69,6 +74,23 @@ public class CustomerServiceImpl implements CustomerService {
 		if (StringUtils.hasText(account)) {
 			orders.setMemberAccount(account);
 			orders.setPointsCost(pointsCost);
+			
+				Points points = pointsDao.findByPointsCost(pointsCost);
+				
+				if(points == null) {
+					return new CustomerRes(RtnCode.DISCOUNT_ERROR.getMessage());
+				}
+				
+				int discount = points.getDiscount();
+				if (discount > 10) {
+					orders.setPriceAfterDiscount(totalPrice * discount / 100);
+				} else if (discount <= 10) {
+					orders.setPriceAfterDiscount(totalPrice * discount / 10);
+				}else {
+					orders.setPriceAfterDiscount(totalPrice);
+				}
+				
+			
 		}
 
 		//存入DB

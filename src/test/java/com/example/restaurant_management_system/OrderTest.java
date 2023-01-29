@@ -30,8 +30,8 @@ public class OrderTest {
 	public void orderAndPointsExchangeTest() {
 		CustomerReq req = new CustomerReq();
 		Map<String, Integer> orderInfoMap = new HashMap<>();
-		orderInfoMap.put("beef", 3);
-		orderInfoMap.put("chicken", 2);
+		orderInfoMap.put("beef", 4);
+		orderInfoMap.put("chicken", 5);
 		req.setOrderInfoMap(orderInfoMap);
 //		req.setMemberAccount("AA");
 //		req.setCostPoints(1);

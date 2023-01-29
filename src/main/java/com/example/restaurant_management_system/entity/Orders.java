@@ -38,6 +38,9 @@ public class Orders {
 
 	@Column(name = "points_cost")
 	private int pointsCost;
+	
+	@Column(name = "price_after_discount")
+	private int priceAfterDiscount;
 
 	public Orders() {
 
@@ -111,6 +114,14 @@ public class Orders {
 
 	public void setPointsCost(int pointsCost) {
 		this.pointsCost = pointsCost;
+	}
+
+	public int getPriceAfterDiscount() {
+		return priceAfterDiscount;
+	}
+
+	public void setPriceAfterDiscount(int priceAfterDiscount) {
+		this.priceAfterDiscount = priceAfterDiscount;
 	}
 
 }

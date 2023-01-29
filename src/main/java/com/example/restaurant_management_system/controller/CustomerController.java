@@ -101,6 +101,10 @@ public class CustomerController {
 		if (StringUtils.hasText(req.getMemberEmail()) && !req.getMemberEmail().matches(emailPattern)) {
 			return new CustomerRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
+		
+		if(req.getMemberAgeRange() < 0) {
+			return new CustomerRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
 
 		return null;
 	}
