@@ -65,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
 		CustomerRes res = new CustomerRes();
 		// 判別orderInfoMap的餐點數量是否大於零
 		for(Map.Entry<String, Integer> m:orderInfoMap.entrySet()) {
-			if(m.getValue() < 0) {
+			if(m.getValue() <= 0) {
 				return new CustomerRes(RtnCode.PARAMETER_ERROR.getMessage());
 			}			
 		}
