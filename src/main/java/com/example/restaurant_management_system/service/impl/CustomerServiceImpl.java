@@ -64,6 +64,13 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerRes customerOrder(Map<String, Integer>orderInfoMap, String account, int totalPrice, int pointsCost) {
 		CustomerRes res = new CustomerRes();
 		
+		// 判別orderInfoMap的餐點數量是否大於零
+		for(Map.Entry<String, Integer> m:orderInfoMap.entrySet()) {
+			if(m.getValue() <= 0) {
+				return new CustomerRes(RtnCode.PARAMETER_ERROR.getMessage());
+			}			
+		}
+		
 		//將Map轉成String 並去掉前後括號
 		String orderInfoString = orderInfoMap.toString().substring(1, orderInfoMap.toString().length() - 1);
 
